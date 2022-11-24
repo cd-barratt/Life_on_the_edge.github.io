@@ -29,7 +29,7 @@ To briefly summarise, the toolbox can perform all the following, running from a 
 * Combine multiple analyses to integrate Exposure, Adaptive and Neutral sensitivity and Range shift potential to make final population vulnerability predictions
 * Create completely transparent logs and summary PDFs of all steps within the toolbox
 
-Here's an overview of the main parts of the pipeline:
+Here's an overview of the main dats structure and parts of the pipeline (integrating R, Julia and bash)
 <img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow.png"  align="center" width="500">
 
 
