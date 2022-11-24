@@ -8,7 +8,7 @@ The toolbox facilitates the integration of environmental (e.g. climate, land use
 We follow the frameworks of two main papers, [Razgour et al. 2018](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12694) and [Razgour et al. 2019](https://www.pnas.org/doi/10.1073/pnas.1820663116), and a series of 22 scripts have been generalised with flexible code to accomodate any species input data from any geographic region.
 
 Here's an overview of the main parts of the pipeline:
-<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow.png"  align="center" width="500">
+<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow.png"  align="center" width="750">
 
 To briefly summarise, the toolbox can do the following things, running from a params.tsv file (up to 36 parameters which may be defined)
 * Download annd process genome-wide data (e.g. from SRA or ENI, or your own raw data)
@@ -26,4 +26,4 @@ To briefly summarise, the toolbox can do the following things, running from a pa
 * Create completely transparent logs and summary PDFs of all steps within the toolbox
 
 Example output:
-<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/pop_vulnerability.png"  align="center" width="500">
+<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/pop_vulnerability.png"  align="left" width="7500">
