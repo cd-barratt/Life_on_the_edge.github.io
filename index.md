@@ -2,7 +2,7 @@ We have recently developed a novel informatic toolbox applicable to any species 
 
 The toolbox facilitates the integration of environmental (e.g. climate, land use), ecological (e.g. spatial occurrences), and evolutionary (e.g. genome-wide SNP) data via a series of modular scripts. The toolbox can be run from start to finish (i.e. raw spatial, environmental and genomic data) through to final population vulnerability maps), or specific modules can be used separately (e.g. if you just want to build Species Distribution Models, look at population striucture or perform Genotype Environment Association analyses).
 
-We follow the frameworks of two main papers, [Razgour et al. 2018](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12694) and [Razgour et al. 2019](https://www.pnas.org/doi/10.1073/pnas.1820663116), via a series of 25 scripts that have been generalised with flexible code to accomodate any species input data from any geographic region. The toolbox estimates three main metrics for each population/sampling locality:
+We follow the frameworks of two main papers, [Razgour et al. 2018](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12694) and [Razgour et al. 2019](https://www.pnas.org/doi/10.1073/pnas.1820663116), via a series of scripts and functions that have been generalised with flexible code to accomodate any species input data from any geographic region. The toolbox estimates three main metrics for each population/sampling locality:
 
 * EXPOSURE - the magnitude of predicted change at future climatic conditions
 * SENSITIVITY - the neutral and adaptive capacity of each individual/population based on genomic and environmental data
@@ -13,7 +13,7 @@ These three metrics are then assessed to calculate final POPULATION VULNERABILIT
 
 
 
-The toolbox runs from a params.tsv file (up to 36 parameters which may be defined), and all you need to provide are the spatial and genomic input data (though you can filter the input spatial, environmental and molecular data that are included based on your own requirements).
+The toolbox runs from a params.tsv file (up to 40 parameters which may be defined/modified), and all you need to provide are the spatial and genomic input data (though you can filter the input spatial, environmental and molecular data that are included based on your own requirements).
 
 Below the main functionailty of the toolbox is briefly listed:
 * Download and process of genome-wide data (e.g. from SRA or ENI, or your own raw data)
@@ -33,7 +33,7 @@ Below the main functionailty of the toolbox is briefly listed:
 
 
 
-Here's an overview of the main dats structure and parts of the pipeline (integrating R, Julia and bash)
+Here's an overview of the main data structures and modules of the pipeline (integrating R, Julia and bash)
 <img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow.png"  align="center" width="500">
 
 
