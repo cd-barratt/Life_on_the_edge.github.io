@@ -132,7 +132,7 @@ If you are satisfied with the LFMM and RDA analyses (having explored how changin
 
 ``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_sensitivity.R ‘Afrixalus_fornasini’ ```
 
-Again, to elaborate what this is doing - this will read the contents of the `run_LOE_sensitivity.R script`, running through each line in sequence. Again it will pass the species name to each of the functions and run them line by line:
+Again, to elaborate what this is doing - this will read the contents of the `run_LOE_sensitivity.R` script, running through each line in sequence. Again it will pass the species name to each of the functions and run them line by line:
 
 ```
 gea_rda_individual_categorisation(species_binomial)
@@ -142,9 +142,9 @@ sensitivity(species_binomial)
 create_circuitscape_inputs(species_binomial) 
 ```
 
-**gea_rda_individual_categorisation(species_binomial)** categorises each individual based on their relative position in the constrained RDA ordination space relative to the environmental predictors (see Razgour et al. 2019). The script automatically reads in putative candidate SNPs that have been identified by either/both LFMM and RDA (definable in params file) and then performs a new RDA based on only these candidate SNPs and the environmental data
+**gea_rda_individual_categorisation(species_binomial)** categorises each individual based on their relative position in the constrained RDA ordination space relative to the environmental predictors (see Razgour et al. 2019). The script automatically reads in putative candidate SNPs that have been identified by either/both LFMM and RDA (definable in params file, see below) and then performs a new RDA based on only these candidate SNPs and the environmental data
 
-To choose which SNPs you wish to retain for the individual categorization analysis (we recommend using option 1 as the midpoint between being conservative and liberal),  set the '**which_loci**' parameter in the params file to one of the following:
+To select which SNPs you wish to retain for the individual categorization analysis (we recommend using option 1 as the midpoint between being conservative and liberal),  set the '**which_loci**' parameter in the params file to one of the following:
 
 *  1: present in either RDA (SD<3) or LFMM (FDR<0.05)
 *  2: present in either RDA (FDR<0.05) or LFMM (FDR<0.05)
@@ -176,9 +176,10 @@ Example output heterozygosity file *_neutral_sensitivity.csv*
 
 ### 11.	Range shift potential
 To run the the Range shift potential analyses (Circuitscape) run the following code embedded in a shell script:
+
 ``` julia --startup-file=no '/work/barratt/Life_on_the_edge_pipeline/-outputs-/'$1'/Range_shift_potential/circuitscape/'$1'_ensemble_SDM_current.jl'
 julia --startup-file=no '/work/barratt/Life_on_the_edge_pipeline/-outputs-/'$1'/Range_shift_potential/circuitscape/'$1'_ensemble_SDM_future.jl'
-singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_range_shift_potential.R 'Afrixalus_fornasini' ```
+singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_range_shift_potential.R 'Afrixalus_fornasini'  ```
 
 The circuitscape analyses will take a long time to run, especially if there are many samples over a large geographic area (it will make pairwise comparisons across all sampling localities). The circuitscape analyses here are for analysing connectivity through the SDM, though you can (and probably should) explore other possible drivers of gene flow such as environmental predictors, forest cover etc.). A widely used R package for optimizing resistance surfaces is [ResistanceGA](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12984) (Peterman, 2018).
 
@@ -186,8 +187,7 @@ Once the Circuitscape analyses are complete, the R function **range_shift_potent
  
 ### 12.	Population_vulnerability
 To run the final part of the toolbox, run the following code embedded in a shell script:
-``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_population_vulnerability.R ‘Afrixalus_fornasini’ 
-```
+``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_population_vulnerability.R ‘Afrixalus_fornasini’ ```
 
 To elaborate the last part of this code, it will do the same as previously, running the **population_vulnerability()** function to create the final files, and then using **summary_pdfs()** will generate the final *.pdf* output which captures all the relevant outputs and information in a single pdf
 
@@ -197,7 +197,6 @@ summary_pdfs(species_binomial)
 ``` 
 
 **population_vulnerability()** integrates the exposure, adaptive and neutral sensitivity and range shift potential results to create a summary ‘Population vulnerability’ metric per population ranging from low (0) to high (10). The function will create a *.csv* output file of the observed data (i.e. where genomic samples are located, and use an inverse distance weighted interpolation to predict Exposure, neutral sensitivity, adaptive sensitivity and Range shift potential results across geographical space, with the underlying assumption that locations closer together share similar properties than those further apart. The function produces summary maps of non-interpolated (observed) and interpolated (predicted) data for each of the metrics (separately and also a composite 4-panel map). The params file allows the user to decide how population vulnerability is calculated by weighting the exposure, adaptive and neutral sensitivity and range shift potential metrics
-
 
 **summary_pdfs()** uses all outputs generated and information in the log file to paste results together into a final summary PDF sheet using the [grobblR](https://cran.r-project.org/web/packages/grobblR/vignettes/grobblR.html) package (Floyd, 2020). Results can be identified and probed by rerunning the individual functions with modified parameter settings, and we recommend thorough reporting and transparency in all publications that use this toolbox.
 
