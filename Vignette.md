@@ -112,8 +112,8 @@ After LFMM has completed and you are satisfied with your candidate SNPs, we will
 
 ### 9.	GEA- RDA
 To run the second part of the sensitivity analyses (RDA), run the following code embedded in a shell script:
-``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/-RDA-.R ‘Afrixalus_fornasini’ 
-```
+
+``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/-RDA-.R ‘Afrixalus_fornasini’ ```
 
 Similar to LFMM, RDA (Redundancy analysis), a multivariate method, will be implemented using the vegan package in R. The process is similar to LFMM whereby population structure will be accounted for in the underlying data, and SNP genotypes will be statistically evaluated against your defined environmental predictors to select candidate SNPs that are potentially under selection. The RDA method implemented here applies the same framework as LFMM, whereby the GIF can be adjusted (using the '**scale_gif_rda**' parameter) to select thresholds for candidate SNPs, but it will also select outlier candidate SNPs using a function that measures the standard deviation of each SNP from the mean loading value across all SNPs (Razgour et al. 2019). We recommend setting this standard deviation ('**rda_sd**') in the params file to 3, but you can make this threshold less conservative by reducing it (e.g. 2.5)
 
@@ -141,7 +141,6 @@ neutral_diversity(species_binomial)
 sensitivity(species_binomial)
 create_circuitscape_inputs(species_binomial) 
 ```
-
 
 **gea_rda_individual_categorisation(species_binomial)** categorises each individual based on their relative position in the constrained RDA ordination space relative to the environmental predictors (see Razgour et al. 2019). The script automatically reads in putative candidate SNPs that have been identified by either/both LFMM and RDA (definable in params file) and then performs a new RDA based on only these candidate SNPs and the environmental data
 
