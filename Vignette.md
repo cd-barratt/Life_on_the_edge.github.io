@@ -66,7 +66,7 @@ To run the exposure analyses, we will simply run the following code embedded in 
 
 To give you an idea of what this is doing - this will read the contents of the run_LOE_exposure.R script, running through each line in sequence. The script itself sources all the internal LotE functions on lines 3-4 and then calls them on each new line. Below is the contents of this R script, you can see that each function will be passed the species name (‘species_binomial’) to run the analyses, and each internal function will extract the parameters from the relevant line of the params file that matches the species name. 
 
-``` setwd('/work/barratt/Life_on_the_edge_pipeline/')
+``` setwd('/work/barratt/Life_on_the_edge_pipeline/')\
 source('./R_functions/-all_functions-/life_on_the_edge_functions.R')
 prepare_spatial_data(species_binomial)
 prepare_environmental_data(species_binomial)
