@@ -1,4 +1,4 @@
-## Vignette
+## How to use the toolbox
 
 ## Life on the edge – a new toolbox for climate change vulnerability assessments at the population level: Vignette
 ### Christopher D. Barratt, Renske E. Onstein, Malin Pinsky, Sebastian Steinfartz, Hjalmar Kuehl, Brenna R. Forester
