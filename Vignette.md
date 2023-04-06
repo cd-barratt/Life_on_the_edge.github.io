@@ -150,14 +150,14 @@ Secondly, just like with LFMM we can see the histogram of the unadjusted and adj
 
 The outlier approach to selecting candidate SNPs is also adjustable as mentioned, outputting a two panel (i.e. a panel for each environmental predictor) histogram of the loadings of each SNP in the dataset. The outer head and tails of the distribution are classed as outlier candidate SNPs (defined using the '**rda_sd**' parameter in params)
 
-<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_histogram_loadings_SD_3.png"  align="left" width="300"> <img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_SNPs.png"> 
+<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_histogram_loadings_SD_3.png"  align="left" width="300"> <img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_SNPs.png" align="right" width="300"> 
 
 An output plot of the SNPs in the RDA ordination space coloured by their environmental predictor association will be made (outlier approach using standard deviation)
 
 Similarly, an output plot of the SNPs in the RDA ordination space with FDR<0.05 will be made, as well as a list of all candidate SNPs across the different FDR thresholds (<0.1, <0.05, <0.01) for each predictor
  
  
-<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_SNPs_post_FDR<0.05_cutoff.png"> 
+<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_SNPs_post_FDR<0.05_cutoff.png" align="left" width="300"> 
 
 
 ### 10.	Sensitivity
