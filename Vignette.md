@@ -36,12 +36,12 @@ The params file (params.tsv) will control parameters for all analyses. The param
 ### 5.	Ensuring LotE knows where to find your scripts and programs
 Assuming that you did all the above steps correctly, you are almost ready to begin analysing data. First there are a couple of final things to do:
 
-Edit your 01_run_life_on_the_edge.sh submit script to match your own HPC details and setup:
-•	In the header (first 9 lines) you’ll need to modify the email address and output directory
-•	In the main body of the script (lines 11 onward) you’ll need to call your version of PLINK (line 13), your version of Julia (lines 16-18) and your version of Java (lines 21-23). Check with your HPC cluster administrator if you are unsure how to do this correctly, as this will be different for every user
-•	Also in the main body of the script, change the working directory (line 26) and the export link to local user R libraries – this will ensure that your R libraries are correctly exported
+i) Edit your 01_run_life_on_the_edge.sh submit script to match your own HPC details and setup:
+*	In the header (first 9 lines) you’ll need to modify the email address and output directory
+*	In the main body of the script (lines 11 onward) you’ll need to call your version of PLINK (line 13), your version of Julia (lines 16-18) and your version of Java (lines 21-23). Check with your HPC cluster administrator if you are unsure how to do this correctly, as this will be different for every user
+*	Also in the main body of the script, change the working directory (line 26) and the export link to local user R libraries – this will ensure that your R libraries are correctly exported
 
-Edit your run_LOE_exposure.R, -LFMM-.R, run_LOE_sensitivity.R, run_LOE_range_shift_potential.R, run_LOE_population_vulnerability.R scripts (in -scripts-/) so that the first line points towards the directory where your toolbox is located. You shouldn’t need to modify anything else in these scripts unless you want to selectively choose which parts of the pipeline are run (see step 13).
+ii) Edit your run_LOE_exposure.R, -LFMM-.R, run_LOE_sensitivity.R, run_LOE_range_shift_potential.R, run_LOE_population_vulnerability.R scripts (in -scripts-/) so that the first line points towards the directory where your toolbox is located. You shouldn’t need to modify anything else in these scripts unless you want to selectively choose which parts of the pipeline are run (see step 13).
 
 
 
