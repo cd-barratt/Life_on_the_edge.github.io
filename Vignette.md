@@ -14,7 +14,7 @@ Steps 1-5 below provide details on the initial setup of the toolbox and guidelin
 To use LotE you’ll first need to do the following:
 1)	Download the github directory for LotE, and move it to where you want to run the toolbox from (in your HPC environment)
 2)	Install Circuitscape, Stacks 2, Singularity, and Julia (or ask your system administrators very nicely)
-3)	Install R version 4.1.3 or download the [Singularity container(https://cloud.sylabs.io/library/sinwood/bioconductor/bioconductor_3.14)] containing that version of R. Move the singularity container to your LotE working directory
+3)	Install R version 4.1.3 or download the [Singularity container](https://cloud.sylabs.io/library/sinwood/bioconductor/bioconductor_3.14) containing that version of R. Move the singularity container to your LotE working directory
 4)	Run the 00_setup_life_on_the_edge.sh script in your HPC environment. The .sh scripts throughout LotE are designed for HPC job queue systems using SLURM, if you use SGE/UGE systems or otherwise then please talk to your HPC cluster administrator to translate them. You’ll need to define your working directories, emails, job logs in the submit script, as well as providing links to your R libraries. The script will install all necessary R packages and dependencies in your containerized version of R that runs in Singularity. 
 5)	Open R and install package dependencies (00_setup.R). Many dependencies are required in R and it’s important that none have error messages (which is why the Singularity container may be useful here, this is tried and tested!)
 
