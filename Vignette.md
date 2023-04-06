@@ -96,8 +96,7 @@ At this point it is important to update the params file for your species with th
 
 ### 8.	GEA- LFMM
 To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
-``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/-LFMM-.R ‘Afrixalus_fornasini’ 
-```
+``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/-LFMM-.R ‘Afrixalus_fornasini’ ```
 
 LFMM is a univariate method that will account for population structure from the underlying data, and SNP genotypes will be statistically evaluated against your defined environmental predictors to select candidate SNPs that are potentially under selection. LFMM will read in the environmental data you prepared using **prepare_environmental_data()**, and subset the variables of choice (defined as '**env_predictor_1**' and '**env_predictor_2**' in the params file). As highly colinear variables are problematic for GEA it will check the Variance Inflation Factor and report the correlation between the variables in a pair plot (*_env_correlations.png*). If your variables are highly correlated (e.g. >0.8) it may be worth considering alternative variables from your predictor set that are less strongly correlated
 
