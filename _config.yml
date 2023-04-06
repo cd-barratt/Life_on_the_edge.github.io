@@ -1,36 +1,4 @@
-name: ddRAD-seq_workshop
-output_dir: docs
-navbar:
-  title: ddRAD-seq_workshop
-  type: inverse
-  left:
-  - text: Home
-    icon: fa-home
-    href: index.html
-  - text: Tutorials
-    menu:
-    - text: 00 - Setting up the data and scripts for analysis
-      href: 00_setup.html
-    - text: 01 - Downloading data from ENA
-      href: 01_download_data.html
-    - text: 02 - Demultiplexing sequencing data (process_radtags)
-      href: 02_process_radtags.html
-    - text: 03 - Running Stacks 2 (denovo_map)
-      href: 03_denovo_map.html
-    - text: 04 - Population structure (Admixture)
-      href: 04_Admixture.html
-    - text: 05 - Population structure (sNMF)
-      href: 05_sNMF.html
-    - text: 06 - Population structure (DAPC)
-      href: 06_DAPC.html
-    - text: 07 - Phylogenetic relationships (RAxML)
-      href: 07_RAxML.html  
-    - text: 08 - Genetic Diversity (F-stats)
-      href: 08_F-stats.html   
-  right:
-  - text: GitHub
-    href: https://github.com/cd-barratt/Life_on_the_edge.github.io/
-output:
-  html_document:
-    lib_dir: site_libs
-    self_contained: no
+theme: jekyll-theme-slate
+title: Life on the edge
+description: a new informatic toolbox to predict population vulnerability to global change
+baseurl: /
