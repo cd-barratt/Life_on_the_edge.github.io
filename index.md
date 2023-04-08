@@ -8,10 +8,10 @@ We follow the frameworks of two main papers, [Razgour et al. 2018](https://onlin
 * SENSITIVITY - the neutral and adaptive capacity of each individual/population based on genomic and environmental data
 * RANGE SHIFT POTENTIAL - the current and predicted change in landscape connecivity for future climatic conditions
 
-These three metrics are then assessed to calculate final POPULATION VULNERABILITY (e.g see below)
-<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/pop_vulnerability.png"  align="left" width="300">
+These three metrics are then assessed to calculate final POPULATION VULNERABILITY (see gure below for workflow and final output)
 
-
+<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow.png"  align="left" width="600">
+<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/pop_vulnerability.png"  align="right" width="600">
 
 The toolbox runs from a params.tsv file (up to 40 parameters which may be defined/modified), and all you need to provide are the spatial and genomic input data (though you can filter the input spatial, environmental and molecular data that are included based on your own requirements).
 
@@ -29,11 +29,4 @@ Below the main functionailty of the toolbox is briefly listed:
 * Evaluate the current and future landscape connectivity of populations (using Circuitscape) to assess the potential for evolutionary rescue of isolated populations
 * Combine multiple analyses to integrate EXPOSURE, adaptive and neutral SENSITIVITY and RANGE SHIFT POTENTIAL to make POPULATION VULNERABILITY predictions
 * Create summary PDFs with completely transparent log files recording all steps within the toolbox
-
-
-
-
-Here's an overview of the main data structures and modules of the pipeline (integrating R, Julia and bash)
-<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow.png"  align="center" width="500">
-
 
