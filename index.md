@@ -21,7 +21,7 @@ These three metrics are then assessed to calculate final POPULATION VULNERABILIT
 
 
 
-The toolbox runs from a params.tsv file (up to 40 parameters which may be defined/modified), and all you need to provide are the spatial and genomic input data (though you can filter the input spatial, environmental and molecular data that are included based on your own requirements).
+The toolbox runs from a params.tsv file (up to 41 parameters which may be defined/modified), and all you need to provide are the spatial and genomic input data (though you can filter the input spatial, environmental and molecular data that are included based on your own requirements).
 
 Below the main functionailty of the toolbox is briefly listed:
 * Download and process of genome-wide data (e.g. from SRA or ENI, or your own raw data)
