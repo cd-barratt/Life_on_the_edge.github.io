@@ -19,7 +19,7 @@ Below the main functionailty of the toolbox is briefly listed:
 * Download and process of genome-wide data (e.g. from SRA or ENI, or your own raw data)
 * Perform QC on these data to help select the most appropriate processing parameters in Stacks 2 for each dataset
 * Optimise and finalise parameters following [best practices](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.12775) and generate PLINK format output files ready for the Life on the edge toolbox
-* Download and process spatial data (e.g. GBIF and georeferenced genomic data), clean it and prepare environmental data (e.g. Workdclim) for Species Distribution Modelling (including clipping to relevant extents per species and preparing background pseudoabsence data)
+* Download and process spatial data (e.g. GBIF and georeferenced genomic data), clean it and prepare environmental data (e.g. Worldclim) for Species Distribution Modelling (including clipping to relevant extents per species and preparing background pseudoabsence data)
 * Run ensemble species distribution models and predict future changes based on user specified parameters
 * Calculate the magnitude of environmental change predicted to occur for each population (based on environmental dissimilarity and SDMs)
 * Perform Genotype-Environment Association Analyses with user specified environmental predictors (RDA, LFMM)
