@@ -155,8 +155,7 @@ Once the RDA script has run you can investigate the outputs; of particular inter
 
 Secondly, just like with LFMM we can see the histogram of the unadjusted and adjusted p-values (after modifying the GIF) of the SNPs, but this time for each predictor (*_RDA_p_value_distribution_env_1.png*, *_RDA_p_value_distribution_env_2.png*). Like with LFMM, the distributions of these p-values can be modified by updating the GIF ('**scale_gif_rda**') in the params file and rerunning the script 
 
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_p_value_distribution_env.png)
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_p_value_distribution_env.png)
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_p_value_distribution.png)
 
 The outlier approach to selecting candidate SNPs is also adjustable as mentioned, outputting a two panel (i.e. a panel for each environmental predictor) histogram of the loadings of each SNP in the dataset. The outer head and tails of the distribution are classed as outlier candidate SNPs (defined using the '**rda_sd**' parameter in params)
 
