@@ -6,40 +6,54 @@ Life on edge (hereafter LotE) is a new climate change vulnerability assessment t
 **Steps 1-5** below provide details on the initial setup of the toolbox and guidelines for formatting the underlying datasets to analyse. **Steps 6-12** walk the user through a typical complete LotE analysis. **Step 13** demonstrates how the toolbox can be used modularly so that only requested parts of the analyses will be undertaken, for example if no genomic data is available for your species and you wish to analyse exposure (the magnitude of predicted change) and range shift potential (ability of populations to move) together
 
 ## Setup
-### 1.	Installation
+### 1.	Example files, code and functions
 To use LotE you’ll first need to do the following:
-* Download the [github directory](https://github.com/cd-barratt/Life_on_the_edge) for LotE, and move it to where you want to run the toolbox from (in your HPC environment)
-* Install [Circuitscape](https://circuitscape.org/downloads/), [Stacks 2](https://catchenlab.life.illinois.edu/stacks/), [Singularity](https://sylabs.io/singularity/), and [Julia](https://julialang.org/) (...or ask your system administrators very nicely)
-* Install R version 4.1.3 or download the [Singularity container](https://cloud.sylabs.io/library/sinwood/bioconductor/bioconductor_3.14) containing that version of R. Move the singularity container to your LotE working directory
-* Run the `00_setup_life_on_the_edge.sh` script in your HPC environment. The .sh scripts throughout LotE are designed for HPC job queue systems using SLURM, if you use SGE/UGE systems or otherwise then please talk to your HPC cluster administrator to translate them. You’ll need to define your working directories, emails, job logs in the submit script, as well as providing links to your R libraries. The script will install all necessary R packages and dependencies in your containerized version of R that runs in Singularity
+* Obtain the example code and data for the African reed frog (*Afrixalus fornasini*) from the [DRYAD repository](XXXXX). Code is also available in the [github directory](https://github.com/cd-barratt/Life_on_the_edge)
+* Unzip and move Life_on_the_edge_pipeline_scripts_functions.zip and Life_on_the_edge_pipeline.zip to your working directory where you want to run the toolbox from (in your HPC environment) - so when you cd to that directory and type ```ls``` you should see something like the following:
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/dir_struct.png)
+* Unzip and move Life_on_the_edge_submit_scripts.zip to your submit scripts directory, where you will submit the jobs to run from. This can also be within your working directory if you want (I just like to keep my submit scripts in separate places from my working directory)
 
-We highly recommend using LotE in a HPC cluster environment and via the suppled Singularity contained due to the heavy computational load of many of the toolbox modules, particularly if pre-processing raw genomic data using Stacks 2, or even if dealing with processed genomic datasets with larger numbers of individuals/SNPs. Species Distribution Modelling and Circuitscape analyses can also be particularly computationally demanding if environmental data is at high spatial resolution and/or spanning large geographic areas (i.e. most of the time)
+### 2. Installing dependencies
+Please ensure the following software is installed and functional in your HPC environment before attempting to use the LotE toolbox:
+* R (4.1.3). Dependencies for toolbox installed within R version in singularity container upon setup (you specify your R libraries in the script where annotated)
+* [Julia (1.7.2)](https://julialang.org/)
+* [Singularity (3.5)](https://sylabs.io/singularity/) and [bioconductor container](https://cloud.sylabs.io/library/sinwood/bioconductor/bioconductor_3.14) with correct R version. The bioconductor container (bioconductor_3.14.sif) should be downloaded and moved to your working directory for LotE
 
-### 2.	Preparing input data 
-Genomic input data should be a PLINK formatted *.map* and *.ped* file, with each row representing an individual, and each column representing a SNP. Individual names of each sample should be listed in the second column, containing no whitespaces. If processing genomic data yourself, Stacks 2 (and other data processing programs) have a tendency to output a header line in the *.map* and *.ped* files containing some info on the program used to generate the files, this will need to be deleted before using the files for LotE. The *.map* and *.ped* files should be placed in a folder named your species (‘Genus_species’) separated by an underscore (e.g. Homo_sapiens) in `/-data-/genomic_data/`
+* Install [Stacks 2](https://catchenlab.life.illinois.edu/stacks/), [Singularity](https://sylabs.io/singularity/), and [Julia](https://julialang.org/) (...or ask your system administrators very nicely)
+* Run the `00_setup_life_on_the_edge.sh` script in your HPC environment. The .sh scripts throughout LotE are designed for HPC job queue systems using SLURM, if you use SGE/UGE systems or otherwise then please talk to your HPC cluster administrator to modify them. You’ll need to define your working directories, emails, job logs in the submit script, as well as providing paths to your own personal R libraries. The script will install all necessary R packages and dependencies in your containerized version of R that runs in Singularity
 
-Spatial data should be a *.csv* file with three columns; first column named ‘Sample’ should contain the individual names. These names should exactly match the individuals in the genomic *.map* and *.ped* files. The second and third columns (‘LONG’, ‘LAT’) should be populated with the georeferenced coordinates of where the individual is from, in decimal degrees. The *.csv* file should be placed in a folder named your species (Genus_species) separated by an underscore (e.g. Homo_sapiens) in `/-data-/spatial_data/`
+### 3.	Preparing input data 
+All input data is already set up for you for the *Afrixalus fornasini example*. However, for reference when preparing your own data, the following sections provide detail on file formatting and expectations. Genomic input data should be a PLINK formatted *.map* and *.ped* file, with each row representing an individual, and each column representing a SNP. Individual names of each sample should be listed in the second column, containing no whitespaces. If processing genomic data yourself, Stacks 2 (and other data processing programs) have a tendency to output a header line in the *.map* and *.ped* files containing some info on the program used to generate the files, this will need to be deleted before using the files for LotE. The *.map* and *.ped* files should be placed in a folder named your species (‘Genus_species’) separated by an underscore (e.g. Afrixalus_fornasini) in `/-data-/genomic_data/`
 
-### 3.	Preparing environmental data 
-Environmental data should be downloaded for the present and future time periods in order to run several parts of the LotE toolbox and make future predictions (i.e. SDMs, Exposure, investigating local adaptation with GEAs). We recommend freely available high-resolution data (ideally at 30 arc seconds, ~1km<sup>2</sup> resolution) from [Worldclim2](http://www.worldclim.com/version2) or [CHELSA](https://chelsa-climate.org/). The environmental data for the time period of future projections is your choice (e.g. 2070), and you also may select a specific [global change scenario](https://www.carbonbrief.org/explainer-how-shared-socioeconomic-pathways-explore-future-climate-change/) of your choice (e.g. Shared Socioeconomic Pathway SSP5 – worst case scenario) for which you can either download the full dataset and store it, or crop it to a smaller region (see script `00_process_environmental_data.R`)
+Spatial data should be a *.csv* file with three columns; first column named ‘Sample’ should contain the individual names. These names should exactly match the individuals in the genomic *.map* and *.ped* files. The second and third columns (‘LONG’, ‘LAT’) should be populated with the georeferenced coordinates of where the individual is from, in decimal degrees. The *.csv* file should be placed in a folder named your species (Genus_species) separated by an underscore (e.g. Afrixalus_fornasini) in `/-data-/spatial_data/`
+
+### 4.	Preparing environmental data 
+Environmental data should be downloaded for the present and future time periods in order to run several parts of the LotE toolbox and make future predictions (i.e. SDMs, Exposure, investigating local adaptation with GEAs). We recommend freely available high-resolution data (ideally at 30 arc seconds, ~1km<sup>2</sup> resolution) from [Worldclim2](http://www.worldclim.com/version2) or [CHELSA](https://chelsa-climate.org/). The environmental data for the time period of future projections is your choice (e.g. 2070), and you also may select a specific [global change scenario](https://www.carbonbrief.org/explainer-how-shared-socioeconomic-pathways-explore-future-climate-change/) of your choice (e.g. Shared Socioeconomic Pathway SSP5 – worst case scenario) for which you can either download the full dataset and store it, or crop it to a smaller region (see script `/-scripts-/processing_environmental_data/00_process_environmental_data.R`)
 
 The environmental data for present and future should be stored in their own directories (`current` and `future`), with separate files representing the data for each predictor (e.g *.tif* or *.asc* files). It’s important that the same predictors are available for both time periods, and are at the same spatial resolution and geographic extent. The folder locations of these data are defined in the params file (‘**current_environmental_data_path**’ and ‘**future_environmental_data_path**’)
 
-### 4.	Populating the params file
-The params file, `params.tsv`, stored in the root of your main directory, controls relevant parameters for all analyses. The params file contains a row per species, and up to 41 parameters that can be used, each line of the params file is thus independent for each species analysis. Most parameters are essential to specify, so the toolbox will fail without them (e.g. the species name, ‘**species_binomial**’), but some are optional (e.g. mapping extent, ‘**geographic_extent**’), see Table 3 in the manuscript for an overview of which params are optional. We recommend best practice of populating almost all parameters so that you can be sure your analysis will not fail, or at least copying the example params file and modifying it to suit your own species
+### 5.	Populating the params file
+The params file, `params.tsv`, stored in the root of your main directory, controls relevant parameters for all analyses. The params file contains a row per species, and up to 53 parameters that can be used, each line of the params file is thus independent for each species analysis. Most parameters are essential to specify, so the toolbox will fail without them (e.g. the species name, ‘**species_binomial**’), but some are optional (e.g. mapping extent, ‘**geographic_extent**’), see Table S1 in the manuscript Supporting Information for an overview of all params. We recommend best practice of populating almost all parameters so that you can be sure your analysis will not fail, or at least copying the example params file and modifying it to suit your own species
 
-### 5.	Ensuring LotE knows where to find your scripts and programs
+### 6.	Ensuring LotE knows where to find your scripts and programs
 Assuming that you did all the above steps correctly, you are almost ready to begin analysing data. First there are a couple of final things to do:
 
-i) Edit your `01_run_life_on_the_edge.sh` submit script to match your own HPC details and setup:
-*	In the header (first 9 lines) you’ll need to modify the email address and output directory
-*	In the main body of the script (lines 11 onward) you’ll need to call your version of PLINK (line 13), your version of Julia (lines 16-18) and your version of Java (lines 21-23). Check with your HPC cluster administrator if you are unsure how to do this correctly, as this will be different for every user
-*	Also in the main body of the script, change the working directory (line 26) and the export link to your own user R libraries – this will ensure that your R libraries are correctly exported
+i) Edit your `-run_life_on_the_edge-.sh`, `00_setup_life_on_the_edge.sh`, `01_run_life_on_the_edge.sh` submit scripts to match your own HPC details and setup:
+*	Change `$YOUR_EMAIL` to your own email address
+*	Change `$YOUR_WORK_DIR` to your own working directory (in your HPC environment)
+*	Change `R_LIBS_USER=$HOME/R/4.1.3:$R_LIBS_USER` to your own local R library paths. If you are not sure what that path is you can open your HPC installation of R 4.1.3 and run `.libPaths()` to get the path
+*	Change `module load Julia/1.7.2-linux-x86_64` to your own HPC module for Julia (the one that you/your system admins installed)
+*	Change `module load GCCcore/10.2.0
+module load ANTLR/2.7.7-Java-11` to your own HPC module for Java (the one that is already present)
 
-ii) Edit your `run_LOE_exposure.R`, `-LFMM-.R`, `-RDA-.R`, `run_LOE_sensitivity.R`, `run_LOE_range_shift_potential.R`, `run_LOE_population_vulnerability.R` scripts (in `-scripts-/`) so that the first line points towards the directory where your toolbox is located. You shouldn’t need to modify anything else in these scripts unless you want to selectively choose which parts of the pipeline are run (Step 13)
+ii) Edit your `-LFMM-.R`, `run_LOE_exposure.R`, `run_LOE_sensitivity.R`, `run_LOE_range_shift_potential.R`, `run_LOE_population_vulnerability.R` scripts (in `-scripts-/`) so that `$YOUR_WORK_DIR` points towards the directory where your toolbox is located. You shouldn’t need to modify anything else in these scripts unless you want to modularly choose which parts of the pipeline are run
+
+iii) When processing your own environmental data, edit the `/processing_environmental_data/00_process_environmental_data.R` script to change `$YOUR_DATA_DIR/` to your own path where you have downloaded environmental data in 
+
+iv) When processing your own genomic data ,edit all scripts within the `/processing_genomic_data/` directory, changing `$YOUR_EMAIL`,`$YOUR_DATA_DIR/`,`$YOUR_WORK_DIR/` to your own paths as indicated in step 1. Additional dependencies in these scripts (SRA toolkit for downloading SRA data, Stacks for data processing) will also vary depending on your own personal HPC setup, so these will also likely need editing, talk to your HPC administrator to understand how to load these modules based on your own architecture
 
 ## Analysing data
-### 6.	Overview of analyses
+### 7.	Overview of analyses
 Finally, you are ready for performing analyses! In the first part of this vignette we will perform a complete analysis of some example data for an East African spiny reed frog (*Afrixalus fornasini*) from start to finish. We provide example *.map*, *.ped*, *.csv* and *params.tsv* files as part of the LotE package. We will run through all steps of the toolbox one at a time and pause at certain parts to check outputs when decisions need to be made that affect subsequent steps. This example uses already newly processsed genomic data from [Barratt et al. (2018)](https://doi.org/10.1111/mec.14862), using Stacks 2,  with RAD-seq data for 7309 SNPs genotyped across 43 individuals
 
 Best practice for using LotE on an unknown (novel) dataset are to run in parts and check outputs before running through the subsequent parts of the toolbox. For example, knowledge of population structure is needed in order to select a reasonable estimate of the number of populations (k) for Genotype-Environment Association (GEA) analyses, and if this is not correctly accounted for then GEA results may be confounded by structure in the data that is unaccounted for. Furthermore, some exploration of the GEA analyses themselves is necessary, where you will likely want to rerun them to explore the data and set a tolerance for true and false positives for your species
@@ -53,7 +67,7 @@ We follow this best practice here, running the following components of the LotE 
 
 All relevant details will be reported in the log file: `./-outputs-/log_files/Afrixalus_fornasini.log`
 
-### 7.	Exposure
+### 8.	Exposure
 To run the exposure analyses, we will simply run the following code embedded in a shell script:
 
 ``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_exposure.R ‘Afrixalus_fornasini’ ``` 
@@ -118,7 +132,7 @@ Finally, a population assignment file is made (*_pop_assignment_LEA.csv*) which 
 
 At this point it is important to update the params file for your species with the most appropriate number of population clusters represented in the data ('**k**').
 
-### 8.	GEA- LFMM
+### 9.	GEA- LFMM
 To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
 
 ``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/-LFMM-.R ‘Afrixalus_fornasini’ ```
@@ -142,7 +156,7 @@ The output files containing your candidate SNPs will be written per predictor an
 
 After LFMM has completed and you are satisfied with your candidate SNPs, we will proceed with running RDA before performing the rest of the ‘Sensitivity’ analysis, which is somewhat less convoluted
 
-### 9.	GEA- RDA
+### 10.	GEA- RDA
 To run the second part of the sensitivity analyses (RDA), run the following code embedded in a shell script:
 
 ``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/-RDA-.R ‘Afrixalus_fornasini’ ```
@@ -172,7 +186,7 @@ Similarly, an output plot of the SNPs in the RDA ordination space with FDR<0.05 
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_7.png)
 
-### 10.	Sensitivity
+### 11.	Sensitivity
 If you are satisfied with the LFMM and RDA analyses (having explored how changing the GIF and/or standard deviation parameters affects the output candidate SNPs), we can continue with the rest of the analysis. To continue with the rest of the ‘Sensitivity’ analysis, we submit the following code embedded in a shell script:
 
 ``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_sensitivity.R ‘Afrixalus_fornasini’ ```
@@ -236,7 +250,7 @@ Example output heterozygosity file *_neutral_sensitivity.csv*
 
 **create_circuitscape_inputs()** will setup the necessary files and structure for the range shift potential analyses. Because the subsequent analyses will use Circuitscape to model pairwise connectivity, memory and time requirements can become substantial with large datasets (i.e many populations/localities). For this reason it is highly recommended that these are performed in a HPC environment. This script will write the required files (*.ini*, *.jl*) for Circuitscape to run in Julia, along with the necessary files (*.sh*) to submit these jobs via HPC. The script copies relevant files to the Circuitscape directory for analysis, and generates the specific required file for the spatial points input (derived from the input spatial genomic data), which is used to specify the ‘nodes’ to model connectivity between populations. In the params file, an option to transform all 0’s to values of 0.001 is provided (‘**circuitscape_transform_zeros**’) (recommended if running range shift potential analyses on SDM outputs) so that Circuitscape does not interpret unsuitable areas as completely impermeable barriers
 
-### 11.	Range shift potential
+### 12.	Range shift potential
 To run the the Range shift potential analyses (Circuitscape) run the following code embedded in a shell script:
 
 ``` julia --startup-file=no '/work/barratt/Life_on_the_edge_pipeline/-outputs-/'$1'/Range_shift_potential/circuitscape/'$1'_ensemble_SDM_current.jl'
@@ -251,7 +265,7 @@ Once the Circuitscape analyses are complete, the R function **range_shift_potent
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_15.png)
  
-### 12.	Population_vulnerability
+### 123.	Population_vulnerability
 To run the final part of the toolbox, run the following code embedded in a shell script:
 ``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_population_vulnerability.R ‘Afrixalus_fornasini’ ```
 
@@ -275,5 +289,5 @@ summary_pdfs(species_binomial)
 
 **summary_pdfs()** uses all outputs generated and information in the log file to paste results together into a final summary PDF sheet using the [grobblR](https://cran.r-project.org/web/packages/grobblR/vignettes/grobblR.html) package (Floyd, 2020). Results can be identified and probed by rerunning the individual functions with modified parameter settings, and we recommend thorough reporting and transparency in all publications that use this toolbox.
 
-13.	Partial analyses (running modularly)
+14.	Partial analyses (running modularly)
 
