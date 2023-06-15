@@ -15,7 +15,7 @@ To use LotE you’ll first need to do the following:
 
 ### 2. Installing dependencies
 Please ensure the following software is installed and functional in your HPC environment before attempting to use the LotE toolbox (and maintain good relations with your HPC administrators of course!):
-* R (4.1.3). Dependencies for toolbox installed within R version in singularity container upon setup (you specify your R libraries in the script where annotated)
+* [R (4.1.3)](https://www.r-project.org/). Dependencies for toolbox installed within R version in singularity container upon setup (you specify your R libraries in the script where annotated)
 * [Julia (1.7.2)](https://julialang.org/)
 * [Singularity (3.5)](https://sylabs.io/singularity/) and [bioconductor container](https://cloud.sylabs.io/library/sinwood/bioconductor/bioconductor_3.14) with correct R version. The bioconductor container (bioconductor_3.14.sif) should be downloaded and moved to your working directory for LotE
 * [Stacks 2](https://catchenlab.life.illinois.edu/stacks/)
@@ -55,9 +55,13 @@ iv) When processing your own genomic data ,edit all scripts within the `/process
 
 ## Analysing data
 ### 7.	Overview of analyses
-Assuming all the above goes fine, finally, you are ready for performing analyses! To run the LotE toolbox in full on the example data for the East African spiny reed frog (*Afrixalus fornasini*) you can simply change directory to your submit scripts and type ```bash ./-run_life_on_the_edge.sh-```. The job will submit and you can wait for the analyses to finish (will take around 36 hours with the example data).
+Assuming all the above goes fine, finally, you are ready for performing analyses! To run the LotE toolbox in full on the example data for the East African spiny reed frog (*Afrixalus fornasini*) 
 
-If you want to run the analyses step by step, we will follow the below procedure:
+![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini.png)
+
+To run the job and generate all outputs and final files you can simply change directory to your submit scripts and type ```bash ./-run_life_on_the_edge.sh-```. The job will submit and you can wait for the analyses to finish (will take around 36 hours with the example data).
+
+To look in more detail at each step and really understand what is happening throughout the LotE toolbox (recommended), follow the below procedure:
 
 In the first part of this vignette we will perform a complete analysis of some example data for an East African spiny reed frog (*Afrixalus fornasini*) from start to finish. We provide example *.map*, *.ped*, *.csv* and *params.tsv* files as part of the example dataset for the LotE package. We will run through all steps of the toolbox one at a time and pause at certain parts to check outputs when decisions need to be made that affect subsequent steps. This example uses already newly processsed genomic data from [Barratt et al. (2018)](https://doi.org/10.1111/mec.14862), using Stacks 2, with RAD-seq data for 7309 SNPs genotyped across 43 individuals
 
