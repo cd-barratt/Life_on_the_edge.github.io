@@ -144,7 +144,7 @@ At this point it is important to update the params file for your species with th
 ### 9.	GEA- LFMM
 To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
 
-``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/-LFMM-.R ‘Afrixalus_fornasini’ ```
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-LFMM-.R ‘Afrixalus_fornasini’ ```
 
 LFMM is a multivariate method that will account for population structure from the underlying data, and SNP genotypes will be statistically evaluated against your defined environmental predictors to select candidate SNPs that are potentially under selection. LFMM will read in the environmental data you prepared using **prepare_environmental_data()**, and subset the variables of choice (defined as '**env_predictor_1**' and '**env_predictor_2**' in the params file). As highly colinear variables are problematic for GEA it will check the Variance Inflation Factor and report the correlation between the variables in a pair plot (*_env_correlations.png*). If your variables are highly correlated (e.g. >0.8) it may be worth considering alternative variables from your predictor set that are less strongly correlated
 
@@ -168,7 +168,7 @@ After LFMM has completed and you are satisfied with your candidate SNPs, we will
 ### 10.	GEA- RDA
 To run the second part of the sensitivity analyses (RDA), run the following code embedded in a shell script:
 
-``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/-RDA-.R ‘Afrixalus_fornasini’ ```
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-RDA-.R ‘Afrixalus_fornasini’ ```
 
 Similar to LFMM, RDA (Redundancy analysis), a univariate method, will be implemented using the vegan package in R. The process is similar to LFMM whereby population structure will be accounted for in the underlying data, and SNP genotypes will be statistically evaluated against your defined environmental predictors to select candidate SNPs that are potentially under selection. The RDA method implemented here applies the same framework as LFMM, whereby the GIF can be adjusted (using the '**scale_gif_rda**' parameter) to select thresholds for candidate SNPs, but it will also select outlier candidate SNPs using a function that measures the standard deviation of each SNP from the mean loading value across all SNPs (Razgour et al. 2019). We recommend setting this standard deviation ('**rda_sd**') in the params file to 3, but you can make this threshold less conservative by reducing it (e.g. 2.5)
 
@@ -198,7 +198,7 @@ Similarly, an output plot of the SNPs in the RDA ordination space with FDR<0.05 
 ### 11.	Sensitivity
 If you are satisfied with the LFMM and RDA analyses (having explored how changing the GIF and/or standard deviation parameters affects the output candidate SNPs), we can continue with the rest of the analysis. To continue with the rest of the ‘Sensitivity’ analysis, we submit the following code embedded in a shell script:
 
-``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_sensitivity.R ‘Afrixalus_fornasini’ ```
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_sensitivity.R ‘Afrixalus_fornasini’ ```
 
 Again, to elaborate what this is doing - this will read the contents of the `run_LOE_sensitivity.R` script, running through each line in sequence. Again it will pass the species name to each of the functions and run them line by line:
 
@@ -262,15 +262,15 @@ Example output heterozygosity file *_neutral_sensitivity.csv*
 ### 12.	Range shift potential
 To run the the Range shift potential analyses (Circuitscape) run the following code embedded in a shell script:
 
-``` julia --startup-file=no '/work/barratt/Life_on_the_edge_pipeline/-outputs-/'$1'/Range_shift_potential/circuitscape/'$1'_ensemble_SDM_current.jl'
-julia --startup-file=no '/work/barratt/Life_on_the_edge_pipeline/-outputs-/'$1'/Range_shift_potential/circuitscape/'$1'_ensemble_SDM_future.jl'
-singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_range_shift_potential.R 'Afrixalus_fornasini'  ```
+``` julia --startup-file=no '$YOUR_WORK_DIR/-outputs-/Afrixalus_fornasini/Range_shift_potential/circuitscape/cumulative_circuitscape_layer.jl'
+singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_range_shift_potential.R 'Afrixalus_fornasini'  ```
 
-The circuitscape analyses will take a long time to run, especially if there are many samples over a large geographic area (it will make pairwise comparisons across all sampling localities). The circuitscape analyses here are for analysing connectivity through the SDM, though you can (and probably should) explore other possible drivers of gene flow such as environmental predictors, forest cover etc.). A widely used R package for optimizing resistance surfaces is [ResistanceGA](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12984) (Peterman, 2018).
+The circuitscape analyses will take a while to run, especially if there are many samples over a large geographic area (it will make pairwise comparisons across all sampling localities). The circuitscape analysis here models connectivity through the cumulative resistance surface (this has been parameterised using the **circuitscape_layers** and **circuitscape_weights** parameters in the Params.tsv file, though you can (and probably should) explore other possible drivers of gene flow such as environmental predictors, forest cover etc.). A widely used R package for optimizing resistance surfaces is [ResistanceGA](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12984) (Peterman, 2018).
 
-Once the Circuitscape analyses are complete, the R function **range_shift_potential()** will automatically summarise and plot the data, as well as quantifying range shift potential. **range_shift_potential()** reads in the output data from the Circuitscape analyses and plots maps of modelled present and future connectivity. It extracts the mean connectivity of each population to all other populations within a maximum dispersal distance (defined for each species in the params file) for both time periods, calculates the % change in connectivity and then uses this to calculate ‘Range shift potential’ (0-10), high reduction in range shift potential from present-future = 10, minimal reduction, stable or increase in range shift potential = 0. When calculating mean connectivity, a maximum dispersal distance in kilometres ('**max_dispersal_distance_km**') may be set in the params file for defining which populations are within geographic reach of one another (i.e. this avoids unrealistically distant populations being considered when calculating mean connectivity for each population). 
-  
-  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_circuitscape_landscape_connectivity_current_future.png)
+Once the Circuitscape analyses are complete, the R function **range_shift_potential()** will automatically summarise and plot the data, as well as quantifying range shift potential. **range_shift_potential()** reads in the output data from the Circuitscape analyses and plots maps of modelled current connectivity. It extracts the mean connectivity of each population to all other populations within a maximum dispersal distance (defined for each species in the params file) and then uses this to calculate ‘Range shift potential’ (0-10), poor range shift potential = 10, good range shift potential = 0. When calculating mean connectivity, a maximum dispersal distance in kilometres ('**max_dispersal_distance_km**') may be set in the params file for defining which populations are within geographic reach of one another (i.e. this avoids unrealistically distant populations being considered when calculating mean connectivity for each population). 
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/circuitscape_cumulative_layer.png)
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_circuitscape_landscape_connectivity.png)
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_15.png)
  
