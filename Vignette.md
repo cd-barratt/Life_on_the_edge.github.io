@@ -189,10 +189,8 @@ An output plot of the SNPs in the RDA ordination space coloured by their environ
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_6.png)
 
-Similarly, an output plot of the SNPs in the RDA ordination space with FDR<0.05 will be made, as well as a list of all candidate SNPs across the different FDR thresholds (<0.1, <0.05, <0.01) for each predictor
+A list of all candidate SNPs across the different FDR thresholds (<0.1, <0.05, <0.01) will be also be made for each predictor
  
-  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_SNPs_post_FDR<0.05_cutoff.png)
-
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_7.png)
 
 ### 11.	Sensitivity
