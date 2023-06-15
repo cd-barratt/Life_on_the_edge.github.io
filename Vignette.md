@@ -55,11 +55,15 @@ iv) When processing your own genomic data ,edit all scripts within the `/process
 
 ## Analysing data
 ### 7.	Overview of analyses
-Finally, you are ready for performing analyses! In the first part of this vignette we will perform a complete analysis of some example data for an East African spiny reed frog (*Afrixalus fornasini*) from start to finish. We provide example *.map*, *.ped*, *.csv* and *params.tsv* files as part of the LotE package. We will run through all steps of the toolbox one at a time and pause at certain parts to check outputs when decisions need to be made that affect subsequent steps. This example uses already newly processsed genomic data from [Barratt et al. (2018)](https://doi.org/10.1111/mec.14862), using Stacks 2,  with RAD-seq data for 7309 SNPs genotyped across 43 individuals
+Assuming all the above goes fine, finally, you are ready for performing analyses! To run the LotE toolbox in full on the example data for the East African spiny reed frog (*Afrixalus fornasini*) you can simply change directory to your submit scripts and type ```bash ./-run_life_on_the_edge.sh-```. The job will submit and you can wait for the analyses to finish (will take around 36 hours with the example data).
+
+If you want to run the analyses step by step, we will follow the below procedure:
+
+In the first part of this vignette we will perform a complete analysis of some example data for an East African spiny reed frog (*Afrixalus fornasini*) from start to finish. We provide example *.map*, *.ped*, *.csv* and *params.tsv* files as part of the example dataset for the LotE package. We will run through all steps of the toolbox one at a time and pause at certain parts to check outputs when decisions need to be made that affect subsequent steps. This example uses already newly processsed genomic data from [Barratt et al. (2018)](https://doi.org/10.1111/mec.14862), using Stacks 2, with RAD-seq data for 7309 SNPs genotyped across 43 individuals
 
 Best practice for using LotE on an unknown (novel) dataset are to run in parts and check outputs before running through the subsequent parts of the toolbox. For example, knowledge of population structure is needed in order to select a reasonable estimate of the number of populations (k) for Genotype-Environment Association (GEA) analyses, and if this is not correctly accounted for then GEA results may be confounded by structure in the data that is unaccounted for. Furthermore, some exploration of the GEA analyses themselves is necessary, where you will likely want to rerun them to explore the data and set a tolerance for true and false positives for your species
 
-We follow this best practice here, running the following components of the LotE toolbox as separate shell scripts that call the relevant software, R scripts and functions. Essentially, all analyses will be passing the relevant parameters from the *params.csv* file to control each analytical step:
+We follow this best practice here, running the following components of the LotE toolbox as separate shell scripts that call the relevant software, R scripts and functions. Essentially, all analyses will be passing the relevant parameters from the *Params.csv* file to control each analytical step:
 
 *	Running Exposure analyses, including Species Distribution Modelling (SDM) - [biomod2](https://github.com/biomodhub/biomod2)
 *	Running Sensitivity analyses, incuding GEAs - [Latent Factor Mixed Models (LFMM)](https://doi.org/10.1093/molbev/msz008) and [RDA (Redundancy Analysis)](https://cran.r-project.org/web/packages/vegan/vegan.pdf)
@@ -71,7 +75,7 @@ All relevant details will be reported in the log file: `./-outputs-/log_files/Af
 ### 8.	Exposure
 To run the exposure analyses, we will simply run the following code embedded in a shell script:
 
-``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_exposure.R ‘Afrixalus_fornasini’ ``` 
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_exposure.R ‘Afrixalus_fornasini’ ``` 
 
 To give you an idea of what this is doing - this will read the contents of the run_LOE_exposure.R script, running through each line in sequence. The script itself sources all the internal LotE functions on lines 3-4 and then calls them on each new line. Below, you can see that each function will be passed the species name (‘**species_binomial**’) to run the analyses, and each internal function will extract the parameters from the relevant line of the params file that matches the species name
 
