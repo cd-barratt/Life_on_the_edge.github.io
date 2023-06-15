@@ -294,5 +294,6 @@ summary_pdfs(species_binomial)
 
 **summary_pdfs()** uses all outputs generated and information in the log file to paste results together into a final summary PDF sheet using the [grobblR](https://cran.r-project.org/web/packages/grobblR/vignettes/grobblR.html) package (Floyd, 2020). Results can be identified and probed by rerunning the individual functions with modified parameter settings, and we recommend thorough reporting and transparency in all publications that use this toolbox.
 
-14.	Partial analyses (running modularly)... coming soon!
+### 14.	Selective modular analyses (i.e. not using the whole toolbox)
+... Coming soon!
 
