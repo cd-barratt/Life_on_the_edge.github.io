@@ -14,12 +14,13 @@ To use LotE you’ll first need to do the following:
 * Unzip and move Life_on_the_edge_submit_scripts.zip to your submit scripts directory, where you will submit the jobs to run from. This can also be within your working directory if you want (I just like to keep my submit scripts in separate places from my working directory)
 
 ### 2. Installing dependencies
-Please ensure the following software is installed and functional in your HPC environment before attempting to use the LotE toolbox:
+Please ensure the following software is installed and functional in your HPC environment before attempting to use the LotE toolbox (and maintain good relations with your HPC administrators of course!):
 * R (4.1.3). Dependencies for toolbox installed within R version in singularity container upon setup (you specify your R libraries in the script where annotated)
 * [Julia (1.7.2)](https://julialang.org/)
 * [Singularity (3.5)](https://sylabs.io/singularity/) and [bioconductor container](https://cloud.sylabs.io/library/sinwood/bioconductor/bioconductor_3.14) with correct R version. The bioconductor container (bioconductor_3.14.sif) should be downloaded and moved to your working directory for LotE
+* [Stacks 2](https://catchenlab.life.illinois.edu/stacks/)
+* [SRA Toolkit](https://github.com/ncbi/sra-tools) if you plan on using the SRA toolkit to download publicly available data
 
-* Install [Stacks 2](https://catchenlab.life.illinois.edu/stacks/), [Singularity](https://sylabs.io/singularity/), and [Julia](https://julialang.org/) (...or ask your system administrators very nicely)
 * Run the `00_setup_life_on_the_edge.sh` script in your HPC environment. The .sh scripts throughout LotE are designed for HPC job queue systems using SLURM, if you use SGE/UGE systems or otherwise then please talk to your HPC cluster administrator to modify them. You’ll need to define your working directories, emails, job logs in the submit script, as well as providing paths to your own personal R libraries. The script will install all necessary R packages and dependencies in your containerized version of R that runs in Singularity
 
 ### 3.	Preparing input data 
@@ -50,7 +51,7 @@ ii) Edit your `-LFMM-.R`, `run_LOE_exposure.R`, `run_LOE_sensitivity.R`, `run_LO
 
 iii) When processing your own environmental data, edit the `/processing_environmental_data/00_process_environmental_data.R` script to change `$YOUR_DATA_DIR/` to your own path where you have downloaded environmental data in 
 
-iv) When processing your own genomic data ,edit all scripts within the `/processing_genomic_data/` directory, changing `$YOUR_EMAIL`,`$YOUR_DATA_DIR/`,`$YOUR_WORK_DIR/` to your own paths as indicated in step 1. Additional dependencies in these scripts (SRA toolkit for downloading SRA data, Stacks for data processing) will also vary depending on your own personal HPC setup, so these will also likely need editing, talk to your HPC administrator to understand how to load these modules based on your own architecture
+iv) When processing your own genomic data ,edit all scripts within the `/processing_genomic_data/` directory, changing `$YOUR_EMAIL`,`$YOUR_DATA_DIR/`,`$YOUR_WORK_DIR/` to your own paths as indicated in step 1. How you load modules in these scripts (SRA toolkit for downloading SRA data, Stacks for data processing) will also vary depending on your own personal HPC setup, so these will also likely need editing, talk to your administrator to understand how to load these modules based on your HPC system
 
 ## Analysing data
 ### 7.	Overview of analyses
