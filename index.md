@@ -6,7 +6,7 @@ We follow the frameworks of two main papers, [Razgour et al. 2018](https://onlin
 
 * EXPOSURE - the magnitude of predicted change at future climatic conditions (i.e. environmental dissimilarity + changes in habitat suitability using species distribution models)
 * NEUTRAL SENSITIVITY - the neutral sensitivity of each individual/population to global change based on genomic data (i.e. lower heterozygosity = higher sensitivity)
-* ADAPTIVE SENSITIVITY - the adaptive capacity of each individual/population to global change based on genomic and environmental data (i.e. how locally adapted populations are)
+* ADAPTIVE SENSITIVITY - the adaptive sensitivity of each individual/population to global change based on genomic and environmental data (i.e. how locally adapted populations are)
 * RANGE SHIFT POTENTIAL - the potential for populations to be able to move (i.e. based on current landscape connectivity)
 
 These four metrics are then assessed to calculate final POPULATION VULNERABILITY (see figures below for workflow and final output)
