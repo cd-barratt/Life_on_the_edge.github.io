@@ -247,7 +247,6 @@ Output categorization maps (individual left panel, population right panel)
  
 **neutral_diversity()** calculates neutral (i.e. non-adaptive) genetic diversity by masking out the putatively adaptive loci. It requires [PLINK](https://www.cog-genomics.org/plink/) (Purcel et al. 2007) to be installed (read the binary location from the params file, ‘**plink_executable**’), then calls PLINK via R. PLINK will generate the output files and the script here will automatically count the populations, number of individuals and neutral heterozygosity to calculate ‘Neutral sensitivity’ (ranging from 0-10)
 
-Example output heterozygosity file *_neutral_sensitivity.csv*
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_13.png)
 
 **sensitivity()** integrates the calculated neutral diversity and exposure with the proportions of adaptively categorised individuals across each population. Based on these it will generate an ‘Adaptive sensitivity’ metric based on the % predicted change in each predictor and the proportion of individuals locally adapted to that predictor. The adaptive sensitivity metric will range between 0-10; being lower if a population has many individuals adapted to a condition that is forecast to change minimally, and higher if the conditions are forecast to change substantially
