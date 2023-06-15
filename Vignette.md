@@ -270,7 +270,7 @@ Once the Circuitscape analyses are complete, the R function **range_shift_potent
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_15.png)
  
-### 123.	Population_vulnerability
+### 13.	Population_vulnerability
 To run the final part of the toolbox, run the following code embedded in a shell script:
 ``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_population_vulnerability.R ‘Afrixalus_fornasini’ ```
 
@@ -294,5 +294,5 @@ summary_pdfs(species_binomial)
 
 **summary_pdfs()** uses all outputs generated and information in the log file to paste results together into a final summary PDF sheet using the [grobblR](https://cran.r-project.org/web/packages/grobblR/vignettes/grobblR.html) package (Floyd, 2020). Results can be identified and probed by rerunning the individual functions with modified parameter settings, and we recommend thorough reporting and transparency in all publications that use this toolbox.
 
-14.	Partial analyses (running modularly)
+14.	Partial analyses (running modularly)... coming soon!
 
