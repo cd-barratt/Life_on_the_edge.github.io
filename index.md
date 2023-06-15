@@ -2,18 +2,19 @@ We have recently developed a novel informatic toolbox applicable to any species 
 
 The toolbox facilitates the integration of environmental (e.g. climate, land use), ecological (e.g. spatial occurrences), and evolutionary (e.g. genome-wide SNP) data via a series of modular scripts. The toolbox can be run from start to finish (i.e. raw spatial, environmental and genomic data) through to final population vulnerability maps), or specific modules can be used separately (e.g. if you just want to build Species Distribution Models, look at population striucture or perform Genotype Environment Association analyses).
 
-We follow the frameworks of two main papers, [Razgour et al. 2018](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12694) and [Razgour et al. 2019](https://www.pnas.org/doi/10.1073/pnas.1820663116), via a series of scripts and functions that have been generalised with flexible code to accomodate any species input data from any geographic region. The toolbox estimates three main metrics for each population/sampling locality:
+We follow the frameworks of two main papers, [Razgour et al. 2018](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12694) and [Razgour et al. 2019](https://www.pnas.org/doi/10.1073/pnas.1820663116), via a series of scripts and functions that have been generalised with flexible code to accomodate any species input data from any geographic region. The toolbox estimates four main metrics for each population/sampling locality:
 
-* EXPOSURE - the magnitude of predicted change at future climatic conditions
-* SENSITIVITY - the neutral and adaptive capacity of each individual/population based on genomic and environmental data
-* RANGE SHIFT POTENTIAL - the current and predicted change in landscape connecivity for future climatic conditions
+* EXPOSURE - the magnitude of predicted change at future climatic conditions (i.e. environmental dissimilarity + changes in habitat suitability using species distribution models)
+* NEUTRAL SENSITIVITY - the neutral sensitivity of each individual/population to global change based on genomic data (i.e. lower heterozygosity = higher sensitivity)
+* ADAPTIVE SENSITIVITY - the adaptive capacity of each individual/population to global change based on genomic and environmental data (i.e. how locally adapted populations are)
+* RANGE SHIFT POTENTIAL - the potential for populations to be able to move (i.e. based on current landscape connectivity)
 
 These three metrics are then assessed to calculate final POPULATION VULNERABILITY (see figure below for workflow and final output)
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow.png)
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/pop_vulnerability.png)
 
-The toolbox runs from a params.tsv file (up to 41 parameters which may be defined/modified), and all you need to provide are the spatial and genomic input data (though you can filter the input spatial, environmental and molecular data that are included based on your own requirements).
+The toolbox runs from a params.tsv file (up to 53 parameters which may be defined/modified), and all you need to provide are the spatial and genomic input data (though you can filter the input spatial, environmental and molecular data that are included based on your own requirements).
 
 Below the main functionailty of the toolbox is briefly listed:
 * Download and process of genome-wide data (e.g. from SRA or ENI, or your own raw data)
