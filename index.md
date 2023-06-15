@@ -9,9 +9,12 @@ We follow the frameworks of two main papers, [Razgour et al. 2018](https://onlin
 * ADAPTIVE SENSITIVITY - the adaptive capacity of each individual/population to global change based on genomic and environmental data (i.e. how locally adapted populations are)
 * RANGE SHIFT POTENTIAL - the potential for populations to be able to move (i.e. based on current landscape connectivity)
 
-These three metrics are then assessed to calculate final POPULATION VULNERABILITY (see figure below for workflow and final output)
+These three metrics are then assessed to calculate final POPULATION VULNERABILITY (see figures below for workflow and final output)
+
+![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow_general.png)
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow.png)
+
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/pop_vulnerability.png)
 
 The toolbox runs from a params.tsv file (up to 53 parameters which may be defined/modified), and all you need to provide are the spatial and genomic input data (though you can filter the input spatial, environmental and molecular data that are included based on your own requirements).
