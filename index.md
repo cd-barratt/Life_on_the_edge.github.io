@@ -1,4 +1,4 @@
-We have recently developed a novel informatic toolbox applicable to any species or geographic area to predict vulnerability to global change, ultimately aimed at improving conservation prioritisation efforts. 
+We have recently developed a novel informatic toolbox applicable to any species or geographic area to predict vulnerability to global change, ultimately aimed at improving conservation prioritisation efforts. You can find the preprint [HERE](XXXXX).
 
 The toolbox facilitates the integration of environmental (e.g. climate, land use), ecological (e.g. spatial occurrences), and evolutionary (e.g. genome-wide SNP) data via a series of modular scripts and functions. The toolbox can be run from start to finish (i.e. raw spatial, environmental and genomic data) through to final population vulnerability maps), or specific modules can be used separately (e.g. if you just want to build Species Distribution Models, look at population striucture or perform Genotype Environment Association analyses).
 
