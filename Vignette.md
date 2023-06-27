@@ -3,7 +3,7 @@
 ## Overview
 Life on edge (hereafter LotE) is a new climate change vulnerability assessment toolbox, facilitating the integration of environmental, molecular and ecological data. With the increasing availability of high-quality georeferenced genome-wide datasets published in open access online repositories, as well as constantly improving climate model simulations, the LotE framework offers a range of tools that can be used to investigate intraspecific responses to global change, thus providing empirical results from large genomic and spatial datasets to inform and assist biodiversity conservation in our rapidly changing world. The toolbox uses the concepts defined in [Razgour et al. (2018)](https://doi.org/10.1111/1755-0998.12694) and [Razgour et al. (2019)](https://doi.org/10.1073/pnas.1820663116) based on the [IPCC AR5 report (2014)](https://www.ipcc.ch/report/ar5/syr/) to assess the Exposure, Sensitivity and Range shift potential of intraspecific populations across species, creating a vulnerability index per population that can be compared within and across species to identify the early warning signals of potential population declines due to global change
 
-**Steps 1-5** below provide details on the initial setup of the toolbox and guidelines for formatting the underlying datasets to analyse. **Steps 6-12** walk the user through a typical complete LotE analysis. **Step 13** demonstrates how the toolbox can be used modularly so that only requested parts of the analyses will be undertaken, for example if no genomic data is available for your species and you wish to analyse exposure (the magnitude of predicted change) and range shift potential (ability of populations to move) together
+**Steps 1-6** below provide details on the initial setup of the toolbox and guidelines for formatting the underlying datasets to analyse. **Steps 7-13** walk the user through a typical complete LotE analysis.
 
 ## Setup
 ### 1.	Example files, code and functions
@@ -294,6 +294,4 @@ summary_pdfs(species_binomial)
 
 **summary_pdfs()** uses all outputs generated and information in the log file to paste results together into a final summary PDF sheet using the [grobblR](https://cran.r-project.org/web/packages/grobblR/vignettes/grobblR.html) package (Floyd, 2020). Results can be identified and probed by rerunning the individual functions with modified parameter settings, and we recommend thorough reporting and transparency in all publications that use this toolbox.
 
-### 14.	Selective modular analyses (i.e. not using the whole toolbox)
-... Coming soon!
 
