@@ -12,6 +12,14 @@ To use LotE you’ll first need to do the following:
 * Unzip and move Life_on_the_edge_pipeline_scripts_functions.zip and Life_on_the_edge_pipeline.zip to your working directory where you want to run the toolbox from (in your HPC environment) 
 * Unzip and move Life_on_the_edge_submit_scripts.zip to your submit scripts directory, where you will submit the jobs to run from. This can also be within your working directory if you want (I just like to keep my submit scripts in separate places from my working directory)
 
+Additionally you need to download the following and place in the correct directories to be sure the toolbox will function properly:
+* Environmental predictor data - please download and place environmental layers used for SDMs, GEAs etc in separate folders for current and future environmental conditions. These folders can be named/specified exactly in the params.tsv file ('current_climate_data_path', 'future_climate_data_path'). We generally use climate projections for all 19 bioclim variables (Worldclim2, https://www.worldclim.org/data/index.html) as well as landcover (Globio4[https://www.globio.info/globio-data-downloads]) and slope (calculated from a digital elevation model available with Worldclim2 data). For future conditions you must select a GCM and time period (e.g. time period: 2061-2080, Global circulation model: HadGEM3-GC31-LL). Each time you rin the toolbox for a given species the data will be clipped to the study region for your analyses (extents can be controlled per species using the 'geographic_extent' parameter in params.tsv)
+
+* Plink and Maxent executables - please download a working executable for Maxent, [maxent.jar][https://biodiversityinformatics.amnh.org/open_source/maxent/] as well as a working [plink](https://www.cog-genomics.org/plink/) executable. These can be placed anywhere (we recommend within -data-), and the toolbox locates these with the 'maxent_executable' and 'plink_executable' parameters in Params.tsv
+
+* Country border data - please download a world shapefile and unzip it to this directory (e.g. [Natural Earth country borders](https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip))
+
+
 ### 2. Installing dependencies
 Please ensure the following software is installed and functional in your HPC environment before attempting to use the LotE toolbox (and maintain good relations with your HPC administrators of course!):
 * [R (4.1.3)](https://www.r-project.org/). Dependencies for toolbox installed within R version in singularity container upon setup (you specify your R libraries in the script where annotated)
