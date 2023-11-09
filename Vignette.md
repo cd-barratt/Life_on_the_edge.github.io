@@ -303,9 +303,7 @@ summary_pdfs(species_binomial)
 
 ### 14.	File requirements and where to put them if you use **skip_sdm**, **skip_impute_genotypes**, **skip_gea**, **skip_circuitscape_layer_parameterisation** options
 
-...
-
-
+[in progess]
 
 ### 15.	Running multi-species analyses
 
