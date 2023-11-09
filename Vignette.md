@@ -6,7 +6,7 @@ Life on edge (hereafter LotE) is a new climate change vulnerability assessment t
 ### A note on understanding analyses (and skipping those that you are not comfortable with...)
 If you are not confident in parameterising certain analyses, we **strongly** recommend that you bring someone onboard that is. In particular, SDMs should be well parameterised as well as GEAs (LFMM and RDA), for which you'll likely need to impute missing genotype data. Lastly, parameterisation of resistance surface inputs for circuitscape can be complex. You can skip the parameterisation of these steps in particular using the **skip_sdm**, **skip_impute_genotypes**, **skip_gea**, **skip_circuitscape_layer_parameterisation** options. If any of these are set to 'yes' in your params file for a given species, these steps will be skipped. If you want LotE to run to completion (i.e. to obtain population vulnerability and summary PDFs) you'll need to supply the missing files that LotE is expecting. A guide to this is [here](www.google.com).
 
-**Steps 1-6** below provide details on the initial setup of the toolbox and guidelines for formatting the underlying datasets to analyse. **Steps 7-13** walk the user through a typical complete LotE analysis.
+**Steps 1-6** below provide details on the initial setup of the toolbox and guidelines for formatting the underlying datasets to analyse. **Steps 7-13** walk the user through a typical complete LotE analysis. **Step 14** provides details about running multi-species analysis.
 
 ## Setup
 ### 1.	Example files, code and functions
