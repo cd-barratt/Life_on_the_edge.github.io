@@ -17,12 +17,9 @@ These four metrics are then assessed to calculate final POPULATION VULNERABILITY
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/pop_vulnerability.png)
 
-The toolbox runs from a Params.tsv file (up to 53 parameters which may be defined/modified), and all you need to provide are the spatial, enviromental and genomic input data per species
+The toolbox runs from a Params.tsv file (up to 60 parameters which may be defined/modified), and all you need to provide are the spatial, enviromental and genomic input data per species (or specify do auto-download the enviromental data from Worldclim version 1)
 
 Below a list of some of the things you can do using the Life on the edge toolbox:
-* Download and process of genome-wide data (e.g. from SRA or ENI, or your own raw data)
-* Perform QC on these data to help select the most appropriate processing parameters in Stacks for each dataset
-* Optimise and finalise parameters following [best practices](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.12775) and generate PLINK format output files ready for the Life on the edge toolbox
 * Download and process spatial data (e.g. GBIF and georeferenced genomic data), clean it and prepare environmental data (e.g. Worldclim) for Species Distribution Modelling (including clipping to relevant extents per species, spatially rarefying input data to control for spatial autocorrelation, and preparing background pseudoabsence data)
 * Run ensemble species distribution models and predict future changes based on user specified parameters
 * Calculate the magnitude of environmental change predicted to occur for each population (based on environmental dissimilarity and SDMs)
