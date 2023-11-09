@@ -303,6 +303,10 @@ summary_pdfs(species_binomial)
 
 ### 14.	File requirements and where to put them if you use **skip_sdm**, **skip_impute_genotypes**, **skip_gea**, **skip_circuitscape_layer_parameterisation** options
 
+...
+
+
+
 ### 15.	Running multi-species analyses
 
 One of our main motivations for developing LotE was so that multiple datasets of suitable matching georeferenced genomic data can be analysed following the same underlying framework that is standardised and reproducible. In principle, all you require are the genomic data themselves (.ped, .map format) and the spatial coordinates of the samples within these files, saved as a .csv format file. Once you have collected the data together you can simply have a new line for each species name (**species_binomial**) in the params file, and off you go!
