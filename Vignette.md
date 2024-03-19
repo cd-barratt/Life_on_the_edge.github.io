@@ -117,28 +117,37 @@ This code will take a little while to run everything depending on your parameter
  
 **prepare_environmental_data()** reads the environmental data stored in the current and future directories and crops it to the geographic extent for the target species. Note that if you have set the params variable **env_data_download* to 'yes' then Worldclim version 1 data will be auto-downloaded (based on the additional other parameters you defined for the spatial resolution, RCP scenario, GCM and year of projection, see section 1 above). This is important to ensure that SDMs in particular are modelling an area that is ecologically relevant for the study species. If the variable '**geographic_extent**' is defined in the params file (xmin, xmax, ymin, ymax) then this will be taken as the geographic modelling extent, and if this is not populated, the function will take the extent covered by all presence samples written above by prepare_spatial_data() to define the modelling extent. Secondly, the function will then extract the relevant environmental data for all predictors at each sampling location of all individuals (= populations) and store it in a new file ending *_full_env_data.csv* which will be used for GEAs later. The output file from this will look something like below (image truncated):
 
- *Full environmental data table*
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_2.png)
+{:.image-caption}
+**Full environmental data table**
+
+![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_2.png)
      
 **spatially_rarefy_presences_and_create_background_data()** reads in the *_presence_data.csv* written by **prepare_spatial_data()** and spatially rarefies the data so that spatial autocorrelation (e.g. sampling bias) will not confound predictions made by SDMs. The '**sp_rare_dist_km**' parameter in the params file represents the minimum distance that two presences are allowed to be, if two presences are less than this distance apart (i.e. highly spatially clustered) then one of the presences will be removed. The spatially rarefied presence data will be written as a new file (*_thinned.csv*) for building SDMs and plotted with the original data for visualization. The function will then generate a number of background (pseudoabsence) points from a given buffer around presence points (defined in the params file – '**n_background_points**' and '**buffer_distance_degrees**'), writing these points as a new file (*_background_points.csv*) and plotting them for visualization
 
 The output files from this will look something like below (raw data vs. spatially rarefied data and a summary of background points), and the relevant *.csv* files will be stored for later use by the toolbox:
 
+{:.image-caption}
+**Presence records**
 |![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_presence_records.png)|
-|:--:| 
-|*Presence records*|
+
+{:.image-caption}
+**Background points**
 |![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_background_points.png)|
-|:--:| 
-|*Background (pseudoabsence) points*|
 
 **sdms_biomod2()** will use the spatially rarefied presence data to build species distribution models (SDMs) for each species, for present conditions, but also for forecasted future conditions.  Here, the framework follows SDM best practices, see [Araujo et al. (2019)](DOI: 10.1126/sciadv.aat4858), using reduced spatial autocorrelation in presence data, as well as accounting for multi-collinearity in predictor variables using Variance Inflation Factors (VIF) if defined in the params file. Alternatively, users may specify a subset of predictors that are ecologically relevant for the species in question (‘**subset_predictors**’). The biomod2 R package is used to evaluate models built using available modelling algorithms which is also subsettable via the params file, ‘**biomod_algorithms**', and retaining only ‘good’ models (i.e. TSS>0.5, modifiable in the params file '**TSS_min**' or '**ROC_min**') for the final ensemble species distribution model prediction. If using MAXENT in your list of SDM modelling algorithms, a copy of the *maxent.jar* file from the [MAXENT website](https://biodiversityinformatics.amnh.org/open_source/maxent/) will need to be placed in a suitable location, and this location set as the ‘**maxent_path**’ parameter in the params file. The model will then be projected onto the future environmental data layers to forecast the species distribution in the future. Variable importances will also be tracked across all retained models so that the user has a sense of which predictor variables have the most influence on the species distribution. Several SDM parameters are modifiable in the params file, including if VIF should be used ('**perform_vif**'), or a subset of variables should be selected ('**subset_predictors**'), which SDM algorithms to use ('**biomod_algorithms**'), number of replicates per algorithm ('**sdm_reps_per_algorithm**', data split percentage between model training and testing ('**data_split_percentage**'). The function will create a self-contained analysis subfolder within the SDMs folder containing all the models and data, summarizing the models themselves as well as various metrics of their performance
 
 The output files from the SDMs will look something like below (current and future SDM predictions, variable importances of model predictors and overall performance of different modelling algorithms that passed defined thresholds to generate final ensemble models)
 
+{:.image-caption}
+**Current and future SDMs**
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_SDMs_current_and_future.png)
 
+{:.image-caption}
+**Variable importance**
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_biomod_variable_importance_general.png)
- 
+
+ {:.image-caption}
+**SDM algorithm performance**
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_biomod_model_algorithm_performance_boxplots.png)
 
 **exposure()** firstly compares how selected climate variables change between the present and predicted future conditions. It takes this information as well as the predicted change in the SDM between the same two time periods and uses it to calculate ‘Exposure’ (ranging from 0-10), measuring the magnitude of change each population/locality will experience between the two time periods. The output files from the exposure analysis will look something like below (predicted change between current and future SDM predictions – range expansions in green and range contractions in orange, predicted change in environmental predictor 1, predicted change in environmental predictor 2)
