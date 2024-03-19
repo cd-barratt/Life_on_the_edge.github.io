@@ -4,10 +4,10 @@ The toolbox facilitates the integration of environmental (e.g. climate, land use
 
 We follow the frameworks of two main papers, [Razgour et al. 2018](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12694) and [Razgour et al. 2019](https://www.pnas.org/doi/10.1073/pnas.1820663116), via a series of scripts and functions that have been generalised with flexible code to accomodate any species input data from any geographic region. The toolbox estimates four main metrics for each population/sampling locality:
 
-* EXPOSURE - the magnitude of predicted change at future climatic conditions (i.e. environmental dissimilarity + changes in habitat suitability using species distribution models)
-* NEUTRAL SENSITIVITY - the neutral sensitivity of each individual/population to global change based on genomic data (i.e. lower heterozygosity = higher sensitivity)
-* ADAPTIVE SENSITIVITY - the adaptive sensitivity of each individual/population to global change based on genomic and environmental data (i.e. how locally adapted populations are)
-* RANGE SHIFT POTENTIAL - the potential for populations to be able to move (i.e. based on current landscape connectivity)
+* **Exposure** - the magnitude of predicted change at future climatic conditions (i.e. environmental dissimilarity + changes in habitat suitability using species distribution models)
+* **Neutral sensitivity** - the neutral sensitivity of each individual/population to global change based on genomic data (i.e. lower heterozygosity = higher neutral sensitivity)
+* **Adaptive sensitivity** - the adaptive sensitivity of each individual/population to global change based on genomic and environmental data (i.e. high genomic offset = higher adaptive sensitivity)
+* **Landscape barriers** - the landscape connectivity resistance for populations to be able to move (i.e. based on current landscape connectivity)
 
 These four metrics are then assessed to calculate final POPULATION VULNERABILITY (see figures below for workflow and final output)
 
@@ -17,17 +17,19 @@ These four metrics are then assessed to calculate final POPULATION VULNERABILITY
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/pop_vulnerability.png)
 
-The toolbox runs from a Params.tsv file (up to 60 parameters which may be defined/modified), and all you need to provide are the spatial, enviromental and genomic input data per species (or specify do auto-download the enviromental data from Worldclim version 1)
+The toolbox runs from a Params.tsv file (up to 67 parameters which may be defined/modified), and all you need to provide are the spatial, enviromental and genomic input data per species (or specify do auto-download the enviromental data from Worldclim)
 
 Below a list of some of the things you can do using the Life on the edge toolbox:
 * Download and process spatial data (e.g. GBIF and georeferenced genomic data), clean it and prepare environmental data (e.g. Worldclim) for Species Distribution Modelling (including clipping to relevant extents per species, spatially rarefying input data to control for spatial autocorrelation, and preparing background pseudoabsence data)
 * Run ensemble species distribution models and predict future changes based on user specified parameters
 * Calculate the magnitude of environmental change predicted to occur for each population (based on environmental dissimilarity and SDMs)
 * Perform Genotype-Environment Association Analyses with user specified environmental predictors (RDA, LFMM)
+* Use simulations and sensitivity analyses to statistically validate the candidate SNPs you have identified using permutation tests
 * Individually categorise individuals in GEA ordination space to assess the extent of local adaptation within each sampled population
-* Calculate neutral and adaptive genetic diversity per population based on standing genetic diversity (heterozygosity) and local adaptation of individuals and populations
+* Quantify genomic offset per population
+* Calculate neutral and adaptive genetic diversity per population based on standing neutral genetic diversity (heterozygosity) and local adaptation of individuals and populations
 * Build adaptive SDMs using these locally adapted individuals to gain a more thorough understanding of differential responses amongst locally adapted populations
-* Evaluate the range shift potential of populations (using Circuitscape) to assess the potential for evolutionary rescue of isolated populations and spread of neutral/adaptive genetic diversity
-* Combine multiple analyses to integrate EXPOSURE, adaptive and neutral SENSITIVITY and RANGE SHIFT POTENTIAL to make POPULATION VULNERABILITY predictions
+* Evaluate the landscape influence on populations ('Landscape barriers', using Circuitscape) to assess the potential for evolutionary rescue of isolated populations and spread of neutral/adaptive genetic diversity
+* Combine multiple analyses to integrate **Exposure**, **Adaptive sensitivity**, **Neutral sensitivity** and **Landscape barriers** to make **Population vulnerability** predictions
 * Create summary PDFs with completely transparent log files recording all steps within the toolbox
 
