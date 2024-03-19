@@ -209,7 +209,7 @@ Finally, a population assignment file is made (*_pop_assignment_LEA.csv*) which 
 
 At this point it is important to update the params file for your species with the most appropriate number of population clusters represented in the data ('**k**').
 
-### 9. Simulation and sensitivity analyses for GEA (local adaptation) analysis
+### 9a. Simulation and sensitivity analyses for GEA (local adaptation) analysis
 Before blindly ploughing ahead with Sensitivity part of the LotE Toolbox, we **highly** recommend exploring the potential adaptive signal in the data first, using our simulation scripts. The below code, embedded in a shell script will first explore a range of parameters for the GEA (LFMM and RDA) analyses on your dataset, demonstrating the sensitivity of the False Discovery Rate threshold (for LFMM) and the Standard Deviation (SD) from the mean loadings (for RDA). It will create a plot of the number of SNPs identified as candidates under selection and their false positive (FP) rates for each of your predictors for both LFMM and RDA analyses. A great resource for understanding this more can be found [here](https://bookdown.org/hhwagner1/LandGenCourse_book/WE_11.html) and [here](https://popgen.nescent.org/2018-03-27_RDA_GEA.html). Obviously, for LFMM analyses - as FDR is increased, you will recover more candidate SNPs but these may be potential FPs. Similarly, for RDA analyses reducing the SD from the mean loadings will recover more candidate SNPs which again may be potential FPs. A good rule of thumb is to examine the output plots to gauge what you are comfortable with in terms of numbers of SNPs vs. FPs, selecting the most appropriate value of FDR and SD for your real LFMM and RDA analyses. These can then be set in the params file ('lfmm_FDR_threshold', and 'rda_SD_threshold').
 
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-00_parameter_exploration-.R ‘Afrixalus_fornasini’ ```
@@ -217,7 +217,6 @@ Before blindly ploughing ahead with Sensitivity part of the LotE Toolbox, we **h
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/LFMM_RDA_sensitivity.png)
  {:.image-caption}
 **LFMM and RDA sensitivity**
-
 
 Once you have an idea of the optimal parameters for RDA and LFMM analyses, you can then press on with those analyses. By running the below code, the LFMM and RDA analyses will be performed, firstly to generate empirical results from your data (using the `-01_empirical_data-.R` script) based on the parameters you supplied in the params file (('lfmm_FDR_threshold', and 'rda_SD_threshold').
    Next, we will use simulations to test the validity of the adaptive signal in your empirical results following the approach of [Salmón et al. 2021](https://www.nature.com/articles/s41467-021-23027-w). The `-02_randomise_data-.R` script will generate 100 permutations of the datasets, with randomised genotype-environment associations (you can think of this as a permutation test). After this, the `-03_perform_simulations-.R` will perform LFMM and RDA analyses on each of these 100 simulated datasets. Lastly, the `-04_evaluate_significance-.R` script will extract all of the p-values for all SNPs in your dataset across the empirical data and all 100 simulations, and by determining a significance threshold (e.g. as the 95th percentile of the Z-score distribution) will categorise candidate SNPs from the empirical analyses above this threshold as significant. A plot will then be created of the identified candidate SNPs in LFMM and RDA analyses, with an adjacent colour-coded plot next to them to indicate if the relevant candidate SNP is statistically significant (green), or non-significant (orange).
@@ -232,6 +231,92 @@ Once you have an idea of the optimal parameters for RDA and LFMM analyses, you c
 **Validation of candidate SNPs based on simulations**
 
 The simulation scripts above will generate a text file with a list of all of the statistically validated candidate SNPs, named 'Afrixalus_fornasini_adaptive_loci_validated.txt'. If this file exists (i.e. if you have run all the sensitivity analyses), this file (rather than the standard [unvalidated] 'Afrixalus_fornasini_adaptive_loci.txt' will be used to perform the local adaptation analyses - specificially for quantifying genomic offset and quantifying local adaptations.
+
+
+**09b. GEA- LFMM**
+**The below sctions 09b and 09c provide more detail on the LFMM and RDA analyses which have been performed in the sensitivity and simulation analyses described above. These sections may be less relevant to read deep into if you have performed the simulations and sensitivity analyses and are confident on the list of candidate SNPs that you have**
+
+To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
+
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-LFMM-.R ‘Afrixalus_fornasini’ ```
+
+LFMM is a univariate method that will account for population structure from the underlying data, and SNP genotypes will be statistically evaluated against your defined environmental predictors to select candidate SNPs that are potentially under selection. LFMM will read in the environmental data you prepared using **prepare_environmental_data()**, and subset the variables of choice (defined as '**env_predictor_1**' and '**env_predictor_2**' in the params file). As highly colinear variables are problematic for GEA it will check the Variance Inflation Factor and report the correlation between the variables in a pair plot (*_env_correlations.png*). If your variables are highly correlated (e.g. >0.8) it may be worth considering alternative variables from your predictor set that are less strongly correlated
+
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_env_correlations.png)
+ {:.image-caption}
+**Environmental data correlations**
+
+
+After this step, the data will be analysed using LFMM (reading your newly populated value of k from your params file). LFMM will read the imputed LFMM formatted file (the one generated by **impute_missing_data()**), and perform a GEA to search for candidate SNPs that show strong statistical correlations with your environmental predictors. For each SNP, a p-value will be assigned, which will be used to calculate a q-value. This q-value will ultimately be used to decide which candidate SNPs pass the pre-defined FDR (False Discovery Rate) thresholds of 0.1, 0.05 and 0.01 by default, but if you are running the simulation scripts before this stage, there will be a greater number of FDR rates. Firstly the p-values and calibrated p-values will be calculated, and then the GIF (Genomic Inflation Factor) will be used to rescale the p-values into an acceptable distribution. We recommend that the '**scale_gif_lfmm**' parameter in params be set to 1 (i.e. no scaling) on first running LFMM, but see [this great tutorial](https://bookdown.org/hhwagner1/LandGenCourse_book/WE_11.html) on GIF modifcation in LFMM for more details if you want to investigate further. The LFMM script will summarise the p-values, the calibrated p-values and the scaled p-values so that you can look at their distributions. Ideally you want a histogram distribution more leaning towards the left (i.e. low p-values), but not too liberal (i.e over-representative high frequencies of low p-values). The plot should be investigated to ensure an acceptable p-value distribution (i.e. not to conservative, not too liberal). 
+
+Output plot of p-values, calibrated p-values and re-adjusted p-values. Here the re-adjusted p-values after modifying the GIF using the scale_gif_lfmm parameter in the params file look acceptable, so we will go with this for now
+
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_LFMM_p_value_distribution_bioclim_5.png)
+ {:.image-caption}
+**Bioclim 5 p-value distrubtions for LFMM analyses**
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_LFMM_p_value_distribution_bioclim_18.png)
+  {:.image-caption}
+**Bioclim 18 p-value distrubtions for LFMM analyses**
+
+
+You may experiment with the GIF, running LFMM a few times until you are satisfied with the readjusted p-value distributions (lower panel). In the log file, the GIF is reported each time, so you can use this to adjust the '**scale_gif_lfmm**' parameter which modifies the GIF. A well calibrated set of p-values should show a GIF of around 1, too liberal <1 and too conservative >1, so if your GIF is around 1.8 for example, and your p-values are very skewed towards high values, you could set your '**scale_gif_lfmm**' parameter to 0.7 which would bring the newly calculated GIF to 1.26 (=1.8 x 0.7) and increase the frequency of lower p-values. Each time, your list of candidate SNPs that are selected to be below the defined FDR (False Discovery Rate) thresholds (0.1, 0.05, 0.01) will change, and it is worth keeping in mind that only a fraction of your total loci (in this case the total is 7309) should realistically show signals of local adaptation. Thus, histogram distributions that are too liberal will detect high numbers of false positives, and too conservative approaches will result in zero detections. P-values are often not well behaved in empirical datasets so you should modify the GIF to an extent that the numbers of candidate SNPs and their p-value distributions are tolerable for you and believable for your study species – there is no right or wrong way to do this, it is subjective, and as long as you report your criteria exactly it is perfectly acceptable. In this regard, the simulation scripts may go soome way to helping you decide what is acceptable for your study system.
+
+The output files containing your candidate SNPs will be written per predictor and also summarized in *_LFMM_candidate_SNPs.csv* (truncated file below). The numbers of SNPs below each FDR threshold will be reported in the log file
+
+  {:.image-caption}
+**LFMM candidate SNPs**
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_5.png)
+
+
+After LFMM has completed and you are satisfied with your candidate SNPs, we will proceed with running RDA before performing the rest of the ‘Sensitivity’ analysis, which is somewhat less convoluted
+
+### 09c.	GEA- RDA
+To run the second part of the sensitivity analyses (RDA), run the following code embedded in a shell script:
+
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-RDA-.R ‘Afrixalus_fornasini’ ```
+
+Similar to LFMM, RDA (Redundancy analysis), a univariate method, will be implemented using the vegan package in R. The process is similar to LFMM whereby population structure will be accounted for in the underlying data, and SNP genotypes will be statistically evaluated against your defined environmental predictors to select candidate SNPs that are potentially under selection. The RDA method implemented here applies the same framework as LFMM, whereby the GIF can be adjusted (using the '**scale_gif_rda**' parameter) to select thresholds for candidate SNPs, but it will also select outlier candidate SNPs using a function that measures the standard deviation of each SNP from the mean loading value across all SNPs (Razgour et al. 2019). We recommend setting this standard deviation ('**rda_sd**') in the params file to 2.5 by default, but you can make this threshold more conservative (e.g by setting it to 3)
+
+Once the RDA script has run you can investigate the outputs; of particular interest here is the first plot (*_RDA_plot.png*) which will show in the left panel the clustering of individuals in ordination space and their position relative to the biplot arrows of each predictor, and in the right panel will show the eigenvalues of the PC axes
+
+
+  {:.image-caption}
+**RDA plots**
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_plot.png)
+
+Secondly, just like with LFMM we can see the histogram of the unadjusted and adjusted p-values (after modifying the GIF) of the SNPs, but this time for each predictor (*_RDA_p_value_distribution_env_1.png*, *_RDA_p_value_distribution_env_2.png*). Like with LFMM, the distributions of these p-values can be modified by updating the GIF ('**scale_gif_rda**') in the params file and rerunning the script 
+
+
+  {:.image-caption}
+**RDA p-value distributions**
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_p_value_distribution.png)
+
+The outlier approach to selecting candidate SNPs is also adjustable as mentioned, outputting a two panel (i.e. a panel for each environmental predictor) histogram of the loadings of each SNP in the dataset. The outer head and tails of the distribution are classed as outlier candidate SNPs (defined using the '**rda_sd**' parameter in params)
+
+
+  {:.image-caption}
+**RDA histogram of loadings**
+![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_histogram_loadings_SD_3.png)
+
+
+  {:.image-caption}
+**RDA candidate SNPs**
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_SNPs.png)
+
+
+An output plot of the SNPs in the RDA ordination space coloured by their environmental predictor association will be made (outlier approach using standard deviation). A list of all candidate SNPs across the different FDR thresholds (<0.1, <0.05, <0.01) will be also be made for each predictor
+
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_6.png)
+   {:.image-caption}
+**RDA list of candidate SNPs**
+
 
 ### 10.	Sensitivity
 If you are satisfied with the LFMM and RDA analyses (having explored how changing the GIF and/or standard deviation parameters affects the output candidate SNPs), we can continue with the rest of the analysis. To continue with the rest of the ‘Sensitivity’ analysis, we submit the following code embedded in a shell script:
@@ -422,86 +507,5 @@ However, an approach like this may be slightly complicated if your species are n
 
 
 
-**10. GEA- LFMM**
-To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
-
-``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-LFMM-.R ‘Afrixalus_fornasini’ ```
-
-LFMM is a univariate method that will account for population structure from the underlying data, and SNP genotypes will be statistically evaluated against your defined environmental predictors to select candidate SNPs that are potentially under selection. LFMM will read in the environmental data you prepared using **prepare_environmental_data()**, and subset the variables of choice (defined as '**env_predictor_1**' and '**env_predictor_2**' in the params file). As highly colinear variables are problematic for GEA it will check the Variance Inflation Factor and report the correlation between the variables in a pair plot (*_env_correlations.png*). If your variables are highly correlated (e.g. >0.8) it may be worth considering alternative variables from your predictor set that are less strongly correlated
-
-
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_env_correlations.png)
- {:.image-caption}
-**Environmental data correlations**
-
-
-After this step, the data will be analysed using LFMM (reading your newly populated value of k from your params file). LFMM will read the imputed LFMM formatted file (the one generated by **impute_missing_data()**), and perform a GEA to search for candidate SNPs that show strong statistical correlations with your environmental predictors. For each SNP, a p-value will be assigned, which will be used to calculate a q-value. This q-value will ultimately be used to decide which candidate SNPs pass the pre-defined FDR (False Discovery Rate) thresholds of 0.1, 0.05 and 0.01 by default, but if you are running the simulation scripts before this stage, there will be a greater number of FDR rates. Firstly the p-values and calibrated p-values will be calculated, and then the GIF (Genomic Inflation Factor) will be used to rescale the p-values into an acceptable distribution. We recommend that the '**scale_gif_lfmm**' parameter in params be set to 1 (i.e. no scaling) on first running LFMM, but see [this great tutorial](https://bookdown.org/hhwagner1/LandGenCourse_book/WE_11.html) on GIF modifcation in LFMM for more details if you want to investigate further. The LFMM script will summarise the p-values, the calibrated p-values and the scaled p-values so that you can look at their distributions. Ideally you want a histogram distribution more leaning towards the left (i.e. low p-values), but not too liberal (i.e over-representative high frequencies of low p-values). The plot should be investigated to ensure an acceptable p-value distribution (i.e. not to conservative, not too liberal). 
-
-Output plot of p-values, calibrated p-values and re-adjusted p-values. Here the re-adjusted p-values after modifying the GIF using the scale_gif_lfmm parameter in the params file look acceptable, so we will go with this for now
-
-
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_LFMM_p_value_distribution_bioclim_5.png)
- {:.image-caption}
-**Bioclim 5 p-value distrubtions for LFMM analyses**
-
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_LFMM_p_value_distribution_bioclim_18.png)
-  {:.image-caption}
-**Bioclim 18 p-value distrubtions for LFMM analyses**
-
-
-You may experiment with the GIF, running LFMM a few times until you are satisfied with the readjusted p-value distributions (lower panel). In the log file, the GIF is reported each time, so you can use this to adjust the '**scale_gif_lfmm**' parameter which modifies the GIF. A well calibrated set of p-values should show a GIF of around 1, too liberal <1 and too conservative >1, so if your GIF is around 1.8 for example, and your p-values are very skewed towards high values, you could set your '**scale_gif_lfmm**' parameter to 0.7 which would bring the newly calculated GIF to 1.26 (=1.8 x 0.7) and increase the frequency of lower p-values. Each time, your list of candidate SNPs that are selected to be below the defined FDR (False Discovery Rate) thresholds (0.1, 0.05, 0.01) will change, and it is worth keeping in mind that only a fraction of your total loci (in this case the total is 7309) should realistically show signals of local adaptation. Thus, histogram distributions that are too liberal will detect high numbers of false positives, and too conservative approaches will result in zero detections. P-values are often not well behaved in empirical datasets so you should modify the GIF to an extent that the numbers of candidate SNPs and their p-value distributions are tolerable for you and believable for your study species – there is no right or wrong way to do this, it is subjective, and as long as you report your criteria exactly it is perfectly acceptable. In this regard, the simulation scripts may go soome way to helping you decide what is acceptable for your study system.
-
-The output files containing your candidate SNPs will be written per predictor and also summarized in *_LFMM_candidate_SNPs.csv* (truncated file below). The numbers of SNPs below each FDR threshold will be reported in the log file
-
-  {:.image-caption}
-**LFMM candidate SNPs**
-
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_5.png)
-
-
-After LFMM has completed and you are satisfied with your candidate SNPs, we will proceed with running RDA before performing the rest of the ‘Sensitivity’ analysis, which is somewhat less convoluted
-
-### 11.	GEA- RDA
-To run the second part of the sensitivity analyses (RDA), run the following code embedded in a shell script:
-
-``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-RDA-.R ‘Afrixalus_fornasini’ ```
-
-Similar to LFMM, RDA (Redundancy analysis), a univariate method, will be implemented using the vegan package in R. The process is similar to LFMM whereby population structure will be accounted for in the underlying data, and SNP genotypes will be statistically evaluated against your defined environmental predictors to select candidate SNPs that are potentially under selection. The RDA method implemented here applies the same framework as LFMM, whereby the GIF can be adjusted (using the '**scale_gif_rda**' parameter) to select thresholds for candidate SNPs, but it will also select outlier candidate SNPs using a function that measures the standard deviation of each SNP from the mean loading value across all SNPs (Razgour et al. 2019). We recommend setting this standard deviation ('**rda_sd**') in the params file to 2.5 by default, but you can make this threshold more conservative (e.g by setting it to 3)
-
-Once the RDA script has run you can investigate the outputs; of particular interest here is the first plot (*_RDA_plot.png*) which will show in the left panel the clustering of individuals in ordination space and their position relative to the biplot arrows of each predictor, and in the right panel will show the eigenvalues of the PC axes
-
-
-  {:.image-caption}
-**RDA plots**
-
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_plot.png)
-
-Secondly, just like with LFMM we can see the histogram of the unadjusted and adjusted p-values (after modifying the GIF) of the SNPs, but this time for each predictor (*_RDA_p_value_distribution_env_1.png*, *_RDA_p_value_distribution_env_2.png*). Like with LFMM, the distributions of these p-values can be modified by updating the GIF ('**scale_gif_rda**') in the params file and rerunning the script 
-
-
-  {:.image-caption}
-**RDA p-value distributions**
-
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_p_value_distribution.png)
-
-The outlier approach to selecting candidate SNPs is also adjustable as mentioned, outputting a two panel (i.e. a panel for each environmental predictor) histogram of the loadings of each SNP in the dataset. The outer head and tails of the distribution are classed as outlier candidate SNPs (defined using the '**rda_sd**' parameter in params)
-
-
-  {:.image-caption}
-**RDA histogram of loadings**
-![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_histogram_loadings_SD_3.png)
-
-
-  {:.image-caption}
-**RDA candidate SNPs**
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_SNPs.png)
-
-
-An output plot of the SNPs in the RDA ordination space coloured by their environmental predictor association will be made (outlier approach using standard deviation). A list of all candidate SNPs across the different FDR thresholds (<0.1, <0.05, <0.01) will be also be made for each predictor
-
-
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_6.png)
-   {:.image-caption}
-**RDA list of candidate SNPs**
 
 
