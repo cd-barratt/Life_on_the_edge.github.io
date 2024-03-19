@@ -149,9 +149,10 @@ Finally, a population assignment file is made (*_pop_assignment_LEA.csv*) which 
 
 At this point it is important to update the params file for your species with the most appropriate number of population clusters represented in the data ('**k**').
 
-### 9.	Simulation and sensitivity analyses for GEA (local adaptation) analysis
+### 9.	Sensitivity
 
-Before blindly ploughing ahead with the LotE Toolbox, we **highly** recommend exploring the potential adaptive signal in the data first, using our simulation scripts. The below code, embedded in a shell script will first explore a range of parameters for the GEA (LFMM and RDA) analyses on your dataset, demonstrating the sensitivity of the False Discovery Rate threshold (for LFMM) and the Standard Deviation (SD) from the mean loadings (for RDA). It will create a plot of the number of SNPs identified as candidates under selection and their false positive (FP) rates for each of your predictors for both LFMM and RDA analyses. A great resource for understanding this more can be found [here](https://bookdown.org/hhwagner1/LandGenCourse_book/WE_11.html) and [here](https://popgen.nescent.org/2018-03-27_RDA_GEA.html). Obviously, for LFMM analyses - as FDR is increased, you will recover more candidate SNPs but these may be potential FPs. Similarly, for RDA analyses reducing the SD from the mean loadings will recover more candidate SNPs which again may be potential FPs. A good rule of thumb is to examine the output plots to gauge what you are comfortable with in terms of numbers of SNPs vs. FPs, selecting the most appropriate value of FDR and SD for your real LFMM and RDA analyses. These can then be set in the params file ('lfmm_FDR_threshold', and 'rda_SD_threshold').
+## Simulation and sensitivity analyses for GEA (local adaptation) analysis
+Before blindly ploughing ahead with Sensitivity part of the LotE Toolbox, we **highly** recommend exploring the potential adaptive signal in the data first, using our simulation scripts. The below code, embedded in a shell script will first explore a range of parameters for the GEA (LFMM and RDA) analyses on your dataset, demonstrating the sensitivity of the False Discovery Rate threshold (for LFMM) and the Standard Deviation (SD) from the mean loadings (for RDA). It will create a plot of the number of SNPs identified as candidates under selection and their false positive (FP) rates for each of your predictors for both LFMM and RDA analyses. A great resource for understanding this more can be found [here](https://bookdown.org/hhwagner1/LandGenCourse_book/WE_11.html) and [here](https://popgen.nescent.org/2018-03-27_RDA_GEA.html). Obviously, for LFMM analyses - as FDR is increased, you will recover more candidate SNPs but these may be potential FPs. Similarly, for RDA analyses reducing the SD from the mean loadings will recover more candidate SNPs which again may be potential FPs. A good rule of thumb is to examine the output plots to gauge what you are comfortable with in terms of numbers of SNPs vs. FPs, selecting the most appropriate value of FDR and SD for your real LFMM and RDA analyses. These can then be set in the params file ('lfmm_FDR_threshold', and 'rda_SD_threshold').
 
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-00_parameter_exploration-.R ‘Afrixalus_fornasini’ ```
 
@@ -166,6 +167,8 @@ Once you have an idea of the optimal parameters for RDA and LFMM analyses, you c
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-04_evaluate_significance-.R ‘Afrixalus_fornasini’ ```
 
 [ fig of statistical validation]
+
+Once you are confident with the adaptive signals in your data being real, you can go ahead with the rest of the analyses.
 
 **GEA- LFMM
 **To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
@@ -215,14 +218,14 @@ An output plot of the SNPs in the RDA ordination space coloured by their environ
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_6.png)
  
-### 10b.	Genomic offset
+### 11.	Genomic offset
 [Genomic offset text update]
 
-### 10c.	Quantify local adaptations
+### 12.	Quantify local adaptations
 [quantify local adapations text update]
 
-### 11.	Sensitivity
-If you are satisfied with the LFMM and RDA analyses (having explored how changing the GIF and/or standard deviation parameters affects the output candidate SNPs), we can continue with the rest of the analysis. To continue with the rest of the ‘Sensitivity and adaptive capcity’ analysis, we submit the following code embedded in a shell script:
+### 13.	Sensitivity
+If you are satisfied with the LFMM and RDA analyses (having explored how changing the GIF and/or standard deviation parameters affects the output candidate SNPs), we can continue with the rest of the analysis. To continue with the rest of the ‘Sensitivity’ analysis, we submit the following code embedded in a shell script:
 
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_sensitivity.R ‘Afrixalus_fornasini’ ```
 
@@ -263,7 +266,7 @@ The built-in functions automatically select individuals that are falling within 
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_10.png)
 
-**adaptive_diversity()** quantifies the adaptive diversity across all populations by plotting the proportions of individuals that are adapted to each category defined in the params file (e.g. 'hot_dry'/'cold_wet'/'intermediate'). It uses the outputs generated by the individual categorisation (above), and plots a summary map of all samples (individuals and populations) and which conditions they are adapted to
+**adaptive_sensitivity()** quantifies the adaptive diversity across all populations by plotting the proportions of individuals that are adapted to each category defined in the params file (e.g. 'hot_dry'/'cold_wet'/'intermediate'). It uses the outputs generated by the individual categorisation (above), and plots a summary map of all samples (individuals and populations) and which conditions they are adapted to
 
 Individual categorization summary:
 
@@ -277,7 +280,7 @@ Output categorization maps (individual left panel, population right panel)
  
   ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_adaptive_categorisation_maps.png)
  
-**neutral_diversity()** calculates neutral (i.e. non-adaptive) genetic diversity by masking out the putatively adaptive loci. It requires [PLINK](https://www.cog-genomics.org/plink/) (Purcel et al. 2007) to be installed (read the binary location from the params file, ‘**plink_executable**’), then calls PLINK via R. PLINK will generate the output files and the script here will automatically count the populations, number of individuals and neutral heterozygosity to calculate ‘Neutral sensitivity’ (ranging from 0-10)
+**neutral_sensitivity()** calculates neutral (i.e. non-adaptive) genetic diversity by masking out the putatively adaptive loci. It requires [PLINK](https://www.cog-genomics.org/plink/) (Purcel et al. 2007) to be installed (read the binary location from the params file, ‘**plink_executable**’), then calls PLINK via R. PLINK will generate the output files and the script here will automatically count the populations, number of individuals and neutral heterozygosity to calculate ‘Neutral sensitivity’ (ranging from 0-10)
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_13.png)
 
@@ -290,12 +293,12 @@ Output categorization maps (individual left panel, population right panel)
 ### 12.	Landscape barriers
 To run the the Landscape barriers analyses (Circuitscape) run the following code embedded in a shell script:
 
-``` julia --startup-file=no '$YOUR_WORK_DIR/-outputs-/Afrixalus_fornasini/Range_shift_potential/circuitscape/cumulative_circuitscape_layer.jl'
+``` julia --startup-file=no '$YOUR_WORK_DIR/-outputs-/Afrixalus_fornasini/Landscape_barriers/circuitscape/cumulative_circuitscape_layer.jl'
 singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_Lanscape_barriers.R 'Afrixalus_fornasini'  ```
 
 The circuitscape analyses will take a while to run, especially if there are many samples over a large geographic area (it will make pairwise comparisons across all sampling localities). The circuitscape analysis here models connectivity through the cumulative resistance surface (this has been parameterised using the **circuitscape_layers** and **circuitscape_weights** parameters in the Params.tsv file, though you can (and probably should) explore other possible drivers of gene flow such as environmental predictors, forest cover etc.). A widely used R package for optimizing resistance surfaces is [ResistanceGA](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12984) (Peterman, 2018).
 
-Once the Circuitscape analyses are complete, the R function **Lanscape_barriers()** will automatically summarise and plot the data, as well as quantifying range shift potential. **range_shift_potential()** reads in the output data from the Circuitscape analyses and plots maps of modelled current connectivity. It extracts the mean connectivity of each population to all other populations within a maximum dispersal distance (defined for each species in the params file) and then uses this to calculate ‘Range shift potential’ (0-10), poor range shift potential = 10, good range shift potential = 0. When calculating mean connectivity, a maximum dispersal distance in kilometres ('**max_dispersal_distance_km**') may be set in the params file for defining which populations are within geographic reach of one another (i.e. this avoids unrealistically distant populations being considered when calculating mean connectivity for each population). 
+Once the Circuitscape analyses are complete, the R function **Lanscape_barriers()** will automatically summarise and plot the data, as well as quantifying range shift potential. **range_shift_potential()** reads in the output data from the Circuitscape analyses and plots maps of modelled current connectivity. It extracts the mean connectivity of each population to all other populations within a maximum dispersal distance (defined for each species in the params file) and then uses this to calculate ‘Landscape barriers’ (0-10), poor range shift potential = 10, good range shift potential = 0. When calculating mean connectivity, a maximum dispersal distance in kilometres ('**max_dispersal_distance_km**') may be set in the params file for defining which populations are within geographic reach of one another (i.e. this avoids unrealistically distant populations being considered when calculating mean connectivity for each population). 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/circuitscape_cumulative_layer.png)
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_circuitscape_landscape_connectivity.png)
@@ -313,7 +316,7 @@ population_vulnerability(species_binomial)
 summary_pdfs(species_binomial) 
 ``` 
 
-**population_vulnerability()** integrates the exposure, adaptive and neutral sensitivity and range shift potential results to create a summary ‘Population vulnerability’ metric per population ranging from low (0) to high (10). The function will create a *.csv* output file of the observed data (i.e. where genomic samples are located, and use an inverse distance weighted interpolation to predict Exposure, neutral sensitivity, adaptive sensitivity and Range shift potential results across geographical space, with the underlying assumption that locations closer together share similar properties than those further apart. The function produces summary maps of non-interpolated (observed) and interpolated (predicted) data for each of the metrics (separately and also a composite 4-panel map). To account for principles of complementarity between metrics, for each species that you analyse the composite 4-panel map of exposure, neutral sensitivity, adaptive sensitivity, range shift potential will highlight the populations that are in the top 10% scores of the metric (highlighted by red circles) and the lower 10% of each metric (highlighted by green circles). This feature enables you to quickly identify population scores for each metric at a glance, so that relevant conservation actions may be considered. The params file allows the user to decide how population vulnerability is calculated by weighting the exposure, adaptive and neutral sensitivity and range shift potential metrics
+**population_vulnerability()** integrates the exposure, adaptive and neutral sensitivity and range shift potential results to create a summary ‘Population vulnerability’ metric per population ranging from low (0) to high (10). The function will create a *.csv* output file of the observed data (i.e. where genomic samples are located, and use an inverse distance weighted interpolation to predict Exposure, neutral sensitivity, adaptive sensitivity and Range shift potential results across geographical space, with the underlying assumption that locations closer together share similar properties than those further apart. The function produces summary maps of non-interpolated (observed) and interpolated (predicted) data for each of the metrics (separately and also a composite 4-panel map). To account for principles of complementarity between metrics, for each species that you analyse the composite 4-panel map of exposure, neutral sensitivity, adaptive sensitivity, landscape barriers will highlight the populations that are in the top 10% scores of the metric (highlighted by red circles) and the lower 10% of each metric (highlighted by green circles). This feature enables you to quickly identify population scores for each metric at a glance, so that relevant conservation actions may be considered. The params file allows the user to decide how population vulnerability is calculated by weighting the exposure, adaptive and neutral sensitivity and landscape barriers metrics
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_16.png)
 <img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_16.png"> 
