@@ -12,6 +12,10 @@ Section 9 gives some information on how to perform sensitivity and simulation an
 **Sections 1-6** below provide details on the initial setup of the toolbox and guidelines for formatting the underlying datasets to analyse. **Sections 7-12** walk the user through a typical complete LotE analysis.
 **Section 13** provides details about files required and where to place them in the directory structure if you want to skip certain parts of the LotE analyses as metioned in the above paragraph. **Section 14** provides details about running multi-species analysis.
 
+| ![space-1.jpg](http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg) | 
+|:--:| 
+| *Space* |
+
 ## Setup
 ### 1.	Example files, code and functions
 To use LotE you’ll first need to do the following:
