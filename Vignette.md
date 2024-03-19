@@ -148,8 +148,26 @@ Finally, a population assignment file is made (*_pop_assignment_LEA.csv*) which 
 
 At this point it is important to update the params file for your species with the most appropriate number of population clusters represented in the data ('**k**').
 
-### 9.	GEA- LFMM
-To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
+### 9.	Sensitivity
+
+Before blindly ploughing ahead with the LotE Toolbox, we **highly** recommend exploring the data first, using our simulation scripts.
+The below code, embedded in a shell script will first explore a range of parameters for LFMM and RDA analyses on your dataset, demonstrating the sensitivity of the False Discovery Rate threshold (for LFMM) and the Standard Deviation (SD) from the mean loadings (for RDA). It will create a plot of the number of SNPs identified as candidates under selection and their false positive (FP) rates for each of your predictors for both LFMM and RDA analyses. Obviously, for LFMM analyses - as FDR is increased, you will recover more candidate SNPs but these may be potential FPs. Similarly, for RDA analyses reducing the SD from the mean loadings will recover more candidate SNPs which again may be potential FPs. A good rule of thumb is to examine the output plots to gauge what you are comfortable with in terms of numbers of SNPs vs. FPs, selecting the most appropriate value of FDR and SD for your real LFMM and RDA analyses. These can then be set in the params file ('lfmm_FDR_threshold', and 'rda_SD_threshold').
+
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-00_parameter_exploration-.R ‘Afrixalus_fornasini’ ```
+
+[image of LFMM vs RDA sensitivity]
+
+
+# run local adaptation simulations
+
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-01_empirical_data-.R ‘Afrixalus_fornasini’ ```
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-02_randomise_data-.R ‘Afrixalus_fornasini’ ```
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-03_perform_simulations-.R ‘Afrixalus_fornasini’ ```
+``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-04_evaluate_significance-.R ‘Afrixalus_fornasini’ ```
+
+
+**GEA- LFMM
+**To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
 
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-LFMM-.R ‘Afrixalus_fornasini’ ```
 
