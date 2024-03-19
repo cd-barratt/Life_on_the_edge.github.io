@@ -170,7 +170,7 @@ Once you have an idea of the optimal parameters for RDA and LFMM analyses, you c
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/SNP_validation.png)
 
-The simulation scripts above will generate a text file with a list of all of the statistically validated candidate SNPs, named 'Afrixalus_fornasini_adaptive_loci_validated.txt'. If this file exists (i.e. if you have run all the sensitvity analyses), this file (rather than the standard [unvalidated]'Afrixalus_fornasini_adaptive_loci.txt' will be used to perform the local adaptation analyses - specificially quantifying genomic offset and quantifying local adaptations.
+The simulation scripts above will generate a text file with a list of all of the statistically validated candidate SNPs, named 'Afrixalus_fornasini_adaptive_loci_validated.txt'. If this file exists (i.e. if you have run all the sensitivity analyses), this file (rather than the standard [unvalidated] 'Afrixalus_fornasini_adaptive_loci.txt' will be used to perform the local adaptation analyses - specificially for quantifying genomic offset and quantifying local adaptations.
 
 ### 10.	Sensitivity
 If you are satisfied with the LFMM and RDA analyses (having explored how changing the GIF and/or standard deviation parameters affects the output candidate SNPs), we can continue with the rest of the analysis. To continue with the rest of the ‘Sensitivity’ analysis, we submit the following code embedded in a shell script:
