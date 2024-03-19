@@ -15,8 +15,6 @@ These four metrics are then assessed to calculate final **Population vulnerabili
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow.png)
 
-![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/pop_vulnerability.png)
-
 The toolbox runs from a Params.tsv file (up to 67 parameters which may be defined/modified), and all you need to provide are the spatial, enviromental and genomic input data per species (or specify do auto-download the enviromental data from Worldclim)
 
 Below a list of some of the things you can do using the Life on the edge toolbox:
