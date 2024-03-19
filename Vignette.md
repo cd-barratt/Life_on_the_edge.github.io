@@ -69,8 +69,8 @@ iii) When processing your own environmental data, edit the `/processing_environm
 Assuming all the above goes fine, finally, you are ready for performing analyses! To run the LotE toolbox in full on the example data for the East African spiny reed frog (*Afrixalus fornasini*) 
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini.png)
-|:--:| 
-| *East African spiny reed frog - Afrixalus fornasini* |
+{:.image-caption}
+*Afrixalus fornasini*
 
 To run the job and generate all outputs and final files you can simply change directory to your submit scripts and type ```bash ./-run_life_on_the_edge.sh-```. The job will submit and you can wait for the analyses to finish (will take around 36 hours with the example data).
 
