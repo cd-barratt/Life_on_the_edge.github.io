@@ -157,7 +157,8 @@ Before blindly ploughing ahead with Sensitivity part of the LotE Toolbox, we **h
 
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-00_parameter_exploration-.R ‘Afrixalus_fornasini’ ```
 
-[image of LFMM vs RDA sensitivity]
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/LFMM_RDA_sensitivity.png)
+
 
 Once you have an idea of the optimal parameters for RDA and LFMM analyses, you can then press on with those analyses. By running the below code, the LFMM and RDA analyses will be performed, firstly to generate empirical results from your data (using the `-01_empirical_data-.R` script) based on the parameters you supplied in the params file (('lfmm_FDR_threshold', and 'rda_SD_threshold').
    Next, we will use simulations to test the validity of the adaptive signal in your empirical results following the approach of [Salmón et al. 2021](https://www.nature.com/articles/s41467-021-23027-w). The `-02_randomise_data-.R` script will generate 100 permutations of the datasets, with randomised genotype-environment associations (you can think of this as a permutation test). After this, the `-03_perform_simulations-.R` will perform LFMM and RDA analyses on each of these 100 simulated datasets. Lastly, the `-04_evaluate_significance-.R` script will extract all of the p-values for all SNPs in your dataset across the empirical data and all 100 simulations, and by determining a significance threshold (e.g. as the 95th percentile of the Z-score distribution) will categorise candidate SNPs from the empirical analyses above this threshold as significant. A plot will then be created of the identified candidate SNPs in LFMM and RDA analyses, with an adjacent colour-coded plot next to them to indicate if the relevant candidate SNP is statistically significant (green), or non-significant (orange).
@@ -167,7 +168,8 @@ Once you have an idea of the optimal parameters for RDA and LFMM analyses, you c
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-03_perform_simulations-.R ‘Afrixalus_fornasini’ ```
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-04_evaluate_significance-.R ‘Afrixalus_fornasini’ ```
 
-[ fig of statistical validation]
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/SNP_validation.png)
+
 
 The simulation scripts above will generate a text file with a list of all of the statistically validated candidate SNPs, named 'Afrixalus_fornasini_adaptive_loci_validated.txt'. If this file exists (i.e. if you have run all the sensitvity analyses), this file (rather than the standard [unvalidated]'Afrixalus_fornasini_adaptive_loci.txt' will be used to perform the local adaptation analyses - specificially quantifying genomic offset and quantifying local adaptations.
 
