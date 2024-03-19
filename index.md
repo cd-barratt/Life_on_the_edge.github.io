@@ -9,7 +9,7 @@ We follow the frameworks of two main papers, [Razgour et al. 2018](https://onlin
 * **Adaptive sensitivity** - the adaptive sensitivity of each individual/population to global change based on genomic and environmental data (i.e. high genomic offset = higher adaptive sensitivity)
 * **Landscape barriers** - the landscape connectivity resistance for populations to be able to move (i.e. based on current landscape connectivity)
 
-These four metrics are then assessed to calculate final POPULATION VULNERABILITY (see figures below for workflow and final output)
+These four metrics are then assessed to calculate final **Population vulnerability** (see figures below for workflow and final output)
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/workflow_general.png)
 
