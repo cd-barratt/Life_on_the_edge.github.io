@@ -221,19 +221,8 @@ An output plot of the SNPs in the RDA ordination space coloured by their environ
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_6.png)
  
-### 12a.	Genomic offset
-To assess population responses to future climate change based on their current vs. predicted future genotype-environment associations for a given climate scenario, we use genomic offsets, implemented in RDA using the approach of [Capblancq and Forester (2021)](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13722). For each population, a genomic offset value will be calculated based on the degree of local adaptation and the amount of predicted change in the future.
 
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_genomic_offset_plot.png)
-
-### 12b.	Individual categorisation
-In addition to the genomic offset analyses, and in particular to categorise individuals based on their local adaptations so that adaptive SDMs may be built following ([Razgour et al. (2019)](https://doi.org/10.1073/pnas.1820663116)), the quantify_local_adaptations() function will 
-
-
-### 13.	Quantify local adaptations
-
-
-### 14.	Sensitivity
+### 10.	Sensitivity
 If you are satisfied with the LFMM and RDA analyses (having explored how changing the GIF and/or standard deviation parameters affects the output candidate SNPs), we can continue with the rest of the analysis. To continue with the rest of the ‘Sensitivity’ analysis, we submit the following code embedded in a shell script:
 
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_sensitivity.R ‘Afrixalus_fornasini’ ```
@@ -241,17 +230,21 @@ If you are satisfied with the LFMM and RDA analyses (having explored how changin
 Again, to elaborate what this is doing - this will read the contents of the `run_LOE_sensitivity.R` script, running through each line in sequence. Again it will pass the species name to each of the functions and run them line by line:
 
 ```
-genomic_offset(species_binomial)
-gea_rda_individual_categorisation(species_binomial)
+gea_lfmm(species_binomial)
+gea_rda(species_binomial)
+gea_individual_categorisation(species_binomial)
 quantify_local_adaptations(species_binomial)
-adaptive_sensitivity(species_binomial)
+genomic_offset(species_binomial)
 neutral_sensitivity(species_binomial)
+adaptive_sensitivity(species_binomial)
 create_circuitscape_inputs(species_binomial) 
 ```
 
-**gea_rda_individual_categorisation(species_binomial)** categorises each individual based on their relative position in the constrained RDA ordination space relative to the environmental predictors (see Razgour et al. 2019). The script automatically reads in putative candidate SNPs that have been identified by either/both LFMM and RDA (definable in params file, see below) and then performs a new RDA based on only these candidate SNPs and the environmental data. Note here that if you have used the **skip_gea** option, then LotE will expect a space delimited file with a list of identified adaptive loci (which you presumably have prepared outside the toolbox). See section 14 for where LotE expect this file.
+**gea_rda(species_binomial)** and **gea_lfmm(species_binomial)** will re-run the RDA and LFMM analyses with your 'optimised' parameters (defined in the params file, see section #9 above). 
 
-To select which SNPs you wish to retain for the individual categorization analysis (we recommend using option 1 as the midpoint between being conservative and liberal),  set the '**which_loci**' parameter in the params file to one of the following:
+**gea_rda_individual_categorisation(species_binomial)** categorises each individual based on their relative position in the constrained RDA ordination space relative to the environmental predictors (see Razgour et al. 2019). The script automatically reads in putative candidate SNPs that have been identified by either/both LFMM and RDA (definable in params file, see below) and then performs a new RDA based on only these candidate SNPs and the environmental data. Note here that if you have used the **skip_gea** option, then LotE will expect a space delimited file with a list of identified adaptive loci (which you presumably have prepared outside the toolbox). See section 17 for where LotE expect this file.
+
+To select which SNPs you wish to retain for the individual categorization analysis (we recommend using option 0 to use only statisticlaly validated SNPs if you have performed the simulation analyses), set the '**which_loci**' parameter in the params file to one of the following:
 
 *  0: statistically validated loci only (based on the simulations)
 *  1: present in either RDA (SD<3) or LFMM (FDR<0.05)
@@ -266,7 +259,7 @@ It will write these loci to a file named *_adaptive_loci.txt* (see below) and us
 
 `34009_67 57923_8 16479_6 162463_8 4051_19 4771_13 6488_63 6925_30 9316_27 11941_25 13041_119 13138_107 13337_13 15727_174 16586_33 18746_22 19277_39 19464_18 21260_53 21886_17 23321_15 23671_20 27661_48 28618_16 30063_3 33339_7 33665_53 37738_33 41965_92 41986_16 41998_7 42783_178 43879_168 45109_32 46607_18 46937_27 47060_22 48682_19 48866_17 51645_31 54786_21 54805_18 56179_127 56521_18 56814_22 58602_22 60566_53 64252_19 65167_6 65398_16 68651_14 69485_46 71866_18 73357_8 73366_52 77814_42 79456_58 79823_19 81237_6 81502_137 81968_25 82779_31 83107_60 84730_74 84940_7 88620_16 88692_16 88887_11 91354_149 91712_18 92066_58 92391_65 95366_11 95672_6 96269_118 98767_76 99548_11 100156_6 104504_77 105945_66 106808_10 107851_43 108520_8 108760_75 109876_32 110024_8 114097_64 116688_10 121595_26 121776_57 124470_112 128427_45 131649_14 131965_19 132281_6 133641_28 134098_42 135668_6 139297_11 141170_23 143267_117 150670_137 156487_12 169030_35 172684_21 178281_42 182134_11 187259_14 192959_11 196422_15 198685_148 211039_81 213940_114 217781_180 218174_45 225052_17 225728_8 234703_45 235389_31 238471_154 249414_20 249640_39 253409_48 253429_61 261805_105 262660_38 268195_20 269752_51 273209_151 273904_105 274346_9 293532_8 295658_7 355497_49 374443_18 394672_17 407884_17 522712_33 589433_21 628214_19 740461_10 818212_24 880025_111 938469_59 960865_51 3065_8 6249_20 13129_29 13630_19 16341_9 16479_6 26646_6 30809_29 36954_12 41441_56 54749_17 56639_59 57827_91 57923_8 59161_54 66570_7 74287_14 76417_25 77016_7 77412_10 79773_24 80819_8 89524_113 90126_118 93894_19 95783_31 98117_57 113312_16 114563_55 123238_9 125143_31 128979_19 129482_53 144376_14 147939_43 155836_103 158641_34 165611_11 171996_137 186320_28 197205_8 207569_38 210614_42 218854_51 233313_10 235127_83 240386_15 262842_53 271016_14 286548_40 333177_31` 
 
-The built-in functions automatically select individuals that are falling within the range certain conditions following Razgour et al. (2019). For example, in a two predictor model (e.g. rainfall and temperature), certain individuals may be classed as 'hot_dry' or 'cold_wet' adapted. Individuals that fall in between the ordination categorisations of either of these categories may be categorised as ‘intermediate’. The distribution of these categorised individuals is plotted in the ordination space, and each individual, which category it belongs to, and its geographic location is saved in a separate *.csv* file. Categories (e.g. ‘hot_dry’/’cold_wet’) may be defined in the params file ('**category_1**', '**category_2**')
+The built-in functions automatically select individuals that are falling within the range certain conditions following Razgour et al. (2019). For example, in a two predictor model (e.g. rainfall and temperature), certain individuals may be classed as 'hot_dry' or 'cold_wet' adapted. Individuals that fall in between the ordination categorisations of either of these categories may be categorised as ‘intermediate’. The distribution of these categorised individuals is plotted in the ordination space, and the function will collate the information for each individual, which category it belongs to, and its geographic location is saved in a separate *.csv* file. Categories (e.g. ‘hot_dry’/’cold_wet’) may be defined in the params file ('**category_1**', '**category_2**'). 
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_individual_categorisation.png)
 
@@ -276,7 +269,7 @@ The built-in functions automatically select individuals that are falling within 
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_10.png)
 
-**adaptive_sensitivity()** quantifies the adaptive diversity across all populations by plotting the proportions of individuals that are adapted to each category defined in the params file (e.g. 'hot_dry'/'cold_wet'/'intermediate'). It uses the outputs generated by the individual categorisation (above), and plots a summary map of all samples (individuals and populations) and which conditions they are adapted to
+**quantify_local_adaptations(species_binomial)** will plot the local adaptation categories described above in geographic space. It plots the proportions of individuals that are adapted to each category defined in the params file (e.g. 'hot_dry'/'cold_wet'/'intermediate'). It uses the outputs generated by the individual categorisation (above), and plots a summary map of all samples (individuals and populations) and which conditions they are adapted to
 
 Individual categorization summary:
 
@@ -289,6 +282,12 @@ Population categorization summary (only sites with > individuals):
 Output categorization maps (individual left panel, population right panel)
  
   ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_adaptive_categorisation_maps.png)
+
+
+**genomic_offset(species_binomial)** assesses population responses to future climate change based on their current vs. predicted future genotype-environment associations for a given climate scenario. We use genomic offsets, implemented in RDA using the approach of [Capblancq and Forester (2021)](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13722). For each population, a genomic offset value will be calculated based on the degree of local adaptation and the amount of predicted change in the future.
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_genomic_offset_plot.png)
+
  
 **neutral_sensitivity()** calculates neutral (i.e. non-adaptive) genetic diversity by masking out the putatively adaptive loci. It requires [PLINK](https://www.cog-genomics.org/plink/) (Purcel et al. 2007) to be installed (read the binary location from the params file, ‘**plink_executable**’), then calls PLINK via R. PLINK will generate the output files and the script here will automatically count the populations, number of individuals and neutral heterozygosity to calculate ‘Neutral sensitivity’ (ranging from 0-10)
 
