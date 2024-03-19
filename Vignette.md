@@ -221,11 +221,17 @@ An output plot of the SNPs in the RDA ordination space coloured by their environ
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_6.png)
  
-### 12.	Genomic offset
-[Genomic offset text update]
+### 12a.	Genomic offset
+To assess population responses to future climate change based on their current vs. predicted future genotype-environment associations for a given climate scenario, we use genomic offsets, implemented in RDA using the approach of [Capblancq and Forester (2021)](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13722). For each population, a genomic offset value will be calculated based on the degree of local adaptation and the amount of predicted change in the future.
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_genomic_offset_plot.png)
+
+### 12b.	Individual categorisation
+In addition to the genomic offset analyses, and in particular to categorise individuals based on their local adaptations so that adaptive SDMs may be built following ([Razgour et al. (2019)](https://doi.org/10.1073/pnas.1820663116)), the quantify_local_adaptations() function will 
+
 
 ### 13.	Quantify local adaptations
-[quantify local adapations text update]
+
 
 ### 14.	Sensitivity
 If you are satisfied with the LFMM and RDA analyses (having explored how changing the GIF and/or standard deviation parameters affects the output candidate SNPs), we can continue with the rest of the analysis. To continue with the rest of the ‘Sensitivity’ analysis, we submit the following code embedded in a shell script:
@@ -235,6 +241,7 @@ If you are satisfied with the LFMM and RDA analyses (having explored how changin
 Again, to elaborate what this is doing - this will read the contents of the `run_LOE_sensitivity.R` script, running through each line in sequence. Again it will pass the species name to each of the functions and run them line by line:
 
 ```
+genomic_offset(species_binomial)
 gea_rda_individual_categorisation(species_binomial)
 quantify_local_adaptations(species_binomial)
 adaptive_sensitivity(species_binomial)
