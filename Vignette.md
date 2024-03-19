@@ -6,8 +6,11 @@ Life on edge (hereafter LotE) is a new climate change vulnerability assessment t
 ### A note on understanding analyses **(and skipping those that you are not comfortable with...)**
 If you are not confident in parameterising certain analyses, we **strongly** recommend that you bring someone onboard that is. In particular, SDMs should be well parameterised as well as GEAs (LFMM and RDA), for which you'll likely need to impute missing genotype data. The processing of genomic data, particularly RAD-seq style data, is also riddled with potential pitfalls (see [here](https://www.nature.com/articles/nrg.2015.28) for an overview), so you'll need to have someone that understands the inherent biases in these datasets, and how they can be mitigated. Lastly, parameterisation of resistance surface inputs for circuitscape can be complex. You can skip the parameterisation of these steps in particular using the **skip_sdm**, **skip_impute_genotypes**, **skip_gea**, **skip_circuitscape_layer_parameterisation** options. If any of these are set to 'yes' in your params file for a given species, these steps will be skipped. If you want LotE to run to completion (i.e. to obtain population vulnerability and summary PDFs) you'll need to supply the missing files that LotE is expecting. A guide to this is foundin section 14.
 
-**Sections 1-6** below provide details on the initial setup of the toolbox and guidelines for formatting the underlying datasets to analyse. **Sections 7-13** walk the user through a typical complete LotE analysis. **Section 9** details how simulations can be used to refine the local adaptation analyses. It is not mandatory but we **highly** recommend it.
-**Section 14** provides details about files required and where to place them in the directory structure if you want to skip certain parts of the LotE analyses as metioned in the above paragraph. **Section 15** provides details about running multi-species analysis .
+### A note on simulation and sensitivity analyses for GEAs
+Section 9 gives some information on how to perform sensitivity and simulation analyses to investigate the local adaptation signals in your empirical data. Though LotE may be run without these scripts (by commenting them out), we **highly** recommend that it is used for your study species to enable statistical confidence in the candidate SNPs identified by your analyses. Read section 9 below for more details.
+
+**Sections 1-6** below provide details on the initial setup of the toolbox and guidelines for formatting the underlying datasets to analyse. **Sections 7-16** walk the user through a typical complete LotE analysis.
+**Section 17** provides details about files required and where to place them in the directory structure if you want to skip certain parts of the LotE analyses as metioned in the above paragraph. **Section 18** provides details about running multi-species analysis .
 
 ## Setup
 ### 1.	Example files, code and functions
@@ -149,9 +152,7 @@ Finally, a population assignment file is made (*_pop_assignment_LEA.csv*) which 
 
 At this point it is important to update the params file for your species with the most appropriate number of population clusters represented in the data ('**k**').
 
-### 9.	Sensitivity
-
-## Simulation and sensitivity analyses for GEA (local adaptation) analysis
+### 9. Simulation and sensitivity analyses for GEA (local adaptation) analysis
 Before blindly ploughing ahead with Sensitivity part of the LotE Toolbox, we **highly** recommend exploring the potential adaptive signal in the data first, using our simulation scripts. The below code, embedded in a shell script will first explore a range of parameters for the GEA (LFMM and RDA) analyses on your dataset, demonstrating the sensitivity of the False Discovery Rate threshold (for LFMM) and the Standard Deviation (SD) from the mean loadings (for RDA). It will create a plot of the number of SNPs identified as candidates under selection and their false positive (FP) rates for each of your predictors for both LFMM and RDA analyses. A great resource for understanding this more can be found [here](https://bookdown.org/hhwagner1/LandGenCourse_book/WE_11.html) and [here](https://popgen.nescent.org/2018-03-27_RDA_GEA.html). Obviously, for LFMM analyses - as FDR is increased, you will recover more candidate SNPs but these may be potential FPs. Similarly, for RDA analyses reducing the SD from the mean loadings will recover more candidate SNPs which again may be potential FPs. A good rule of thumb is to examine the output plots to gauge what you are comfortable with in terms of numbers of SNPs vs. FPs, selecting the most appropriate value of FDR and SD for your real LFMM and RDA analyses. These can then be set in the params file ('lfmm_FDR_threshold', and 'rda_SD_threshold').
 
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-00_parameter_exploration-.R ‘Afrixalus_fornasini’ ```
@@ -170,8 +171,8 @@ Once you have an idea of the optimal parameters for RDA and LFMM analyses, you c
 
 Once you are confident with the adaptive signals in your data being real, you can go ahead with the rest of the analyses.
 
-**GEA- LFMM
-**To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
+**10. GEA- LFMM**
+To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
 
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-LFMM-.R ‘Afrixalus_fornasini’ ```
 
@@ -194,7 +195,7 @@ The output files containing your candidate SNPs will be written per predictor an
 
 After LFMM has completed and you are satisfied with your candidate SNPs, we will proceed with running RDA before performing the rest of the ‘Sensitivity’ analysis, which is somewhat less convoluted
 
-### 10.	GEA- RDA
+### 11.	GEA- RDA
 To run the second part of the sensitivity analyses (RDA), run the following code embedded in a shell script:
 
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-RDA-.R ‘Afrixalus_fornasini’ ```
@@ -218,13 +219,13 @@ An output plot of the SNPs in the RDA ordination space coloured by their environ
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_6.png)
  
-### 11.	Genomic offset
+### 12.	Genomic offset
 [Genomic offset text update]
 
-### 12.	Quantify local adaptations
+### 13.	Quantify local adaptations
 [quantify local adapations text update]
 
-### 13.	Sensitivity
+### 14.	Sensitivity
 If you are satisfied with the LFMM and RDA analyses (having explored how changing the GIF and/or standard deviation parameters affects the output candidate SNPs), we can continue with the rest of the analysis. To continue with the rest of the ‘Sensitivity’ analysis, we submit the following code embedded in a shell script:
 
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_sensitivity.R ‘Afrixalus_fornasini’ ```
@@ -290,7 +291,7 @@ Output categorization maps (individual left panel, population right panel)
 
 **create_circuitscape_inputs()** will setup the necessary files and structure for the range shift potential analyses. Because the subsequent analyses will use Circuitscape to model pairwise connectivity, memory and time requirements can become substantial with large datasets (i.e many populations/localities). For this reason it is highly recommended that these are performed in a HPC environment. This script will write the required files (*.ini*, *.jl*) for Circuitscape to run in Julia, along with the necessary files (*.sh*) to submit these jobs via HPC. The script copies relevant files to the Circuitscape directory for analysis, and generates the specific required file for the spatial points input (derived from the input spatial genomic data), which is used to specify the ‘nodes’ to model connectivity between populations. In the params file, an option to transform all 0’s to values of 0.001 is provided (‘**circuitscape_transform_zeros**’) (recommended if running range shift potential analyses on SDM outputs) so that Circuitscape does not interpret unsuitable areas as completely impermeable barriers. Note that as mentioned in section 1, the parameterisation of circuitscape input resistance layers can be skipped if requested, but expects the necessary files in the correct places if you prepare this outside LotE. See section 14 for details.
 
-### 12.	Landscape barriers
+### 15.	Landscape barriers
 To run the the Landscape barriers analyses (Circuitscape) run the following code embedded in a shell script:
 
 ``` julia --startup-file=no '$YOUR_WORK_DIR/-outputs-/Afrixalus_fornasini/Landscape_barriers/circuitscape/cumulative_circuitscape_layer.jl'
@@ -305,7 +306,7 @@ Once the Circuitscape analyses are complete, the R function **Lanscape_barriers(
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_15.png)
  
-### 13.	Population_vulnerability
+### 16.	Population_vulnerability
 To run the final part of the toolbox, run the following code embedded in a shell script:
 ``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_population_vulnerability.R ‘Afrixalus_fornasini’ ```
 
@@ -329,13 +330,13 @@ summary_pdfs(species_binomial)
 
 **summary_pdfs()** uses all outputs generated and information in the log file to paste results together into a final summary PDF sheet using the [grobblR](https://cran.r-project.org/web/packages/grobblR/vignettes/grobblR.html) package (Floyd, 2020). The contents of the final summary PDF will depend if you have run the full LotE toolbox - if you have skipped certain steps as detailed in section 1 (e.g. SDMs, GEAs, imputing genotypes, circuitscape parameterisation) then these parts will be replaced with the inputs you provided. Results can be identified and probed by rerunning the individual functions with modified parameter settings, and we recommend thorough reporting and transparency in all publications that use this toolbox.
 
-### 14.	Skipping tricky parameterisations
+### 17.	Skipping tricky parameterisations
 
 The below image provides details on the files expected by LotE if you decide to skip the relevant parts of the toolbox (e.g. **skip_sdm**, **skip_impute_genotypes**, **skip_gea**, **skip_circuitscape_layer_parameterisation** options). If you want to prepare these analyses outside the toolbox with the help of an expert or a different piece of software (e.g. [Maxent](https://biodiversityinformatics.amnh.org/open_source/maxent/) for SDMs, [MACH](https://csg.sph.umich.edu/abecasis/mach/tour/imputation.html) for genotype imputation, [Baypass](https://forgemia.inra.fr/mathieu.gautier/baypass_public) for GEAs, or [ResistanceGA](https://github.com/wpeterman/ResistanceGA)/[radish](https://github.com/nspope/radish/tree/master) for parameterising a Circuitscape resistance surface), you'd need to make sure the directory structure is as below, especially ensuring already creating directories and subdirectories as indicated. Blue text are files you will need to add. Examples of all of these and their formats can be found [here](https://github.com/cd-barratt/Life_on_the_edge.github.io/blob/main/file_formats_missing_files.zip)
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/file_requirements_if_skipping_LotE_sections.png)
 
-### 15.	Running multi-species analyses
+### 18.	Running multi-species analyses
 
 One of our main motivations for developing LotE was so that multiple datasets of suitable matching georeferenced genomic data can be analysed following the same underlying framework that is standardised and reproducible. In principle, all you require are the genomic data themselves (.ped, .map format) and the spatial coordinates of the samples within these files, saved as a .csv format file. Once you have collected the data together you can simply have a new line for each species name (**species_binomial**) in the params file, and off you go!
 
