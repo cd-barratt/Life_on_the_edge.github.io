@@ -68,9 +68,11 @@ iii) When processing your own environmental data, edit the `/processing_environm
 ### 7.	Overview of analyses
 Assuming all the above goes fine, finally, you are ready for performing analyses! To run the LotE toolbox in full on the example data for the East African spiny reed frog (*Afrixalus fornasini*) 
 
+
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini.png)
 {:.image-caption}
 ***Afrixalus fornasini***
+
 
 To run the job and generate all outputs and final files you can simply change directory to your submit scripts and type ```bash ./-run_life_on_the_edge.sh-```. The job will submit and you can wait for the analyses to finish (will take around 36 hours with the example data).
 
@@ -114,59 +116,94 @@ This code will take a little while to run everything depending on your parameter
 **Spatial data table**
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_1.png)
+
  
 **prepare_environmental_data()** reads the environmental data stored in the current and future directories and crops it to the geographic extent for the target species. Note that if you have set the params variable **env_data_download* to 'yes' then Worldclim version 1 data will be auto-downloaded (based on the additional other parameters you defined for the spatial resolution, RCP scenario, GCM and year of projection, see section 1 above). This is important to ensure that SDMs in particular are modelling an area that is ecologically relevant for the study species. If the variable '**geographic_extent**' is defined in the params file (xmin, xmax, ymin, ymax) then this will be taken as the geographic modelling extent, and if this is not populated, the function will take the extent covered by all presence samples written above by prepare_spatial_data() to define the modelling extent. Secondly, the function will then extract the relevant environmental data for all predictors at each sampling location of all individuals (= populations) and store it in a new file ending *_full_env_data.csv* which will be used for GEAs later. The output file from this will look something like below (image truncated):
+
 
 {:.image-caption}
 **Full environmental data table**
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_2.png)
+
      
 **spatially_rarefy_presences_and_create_background_data()** reads in the *_presence_data.csv* written by **prepare_spatial_data()** and spatially rarefies the data so that spatial autocorrelation (e.g. sampling bias) will not confound predictions made by SDMs. The '**sp_rare_dist_km**' parameter in the params file represents the minimum distance that two presences are allowed to be, if two presences are less than this distance apart (i.e. highly spatially clustered) then one of the presences will be removed. The spatially rarefied presence data will be written as a new file (*_thinned.csv*) for building SDMs and plotted with the original data for visualization. The function will then generate a number of background (pseudoabsence) points from a given buffer around presence points (defined in the params file – '**n_background_points**' and '**buffer_distance_degrees**'), writing these points as a new file (*_background_points.csv*) and plotting them for visualization
 
 The output files from this will look something like below (raw data vs. spatially rarefied data and a summary of background points), and the relevant *.csv* files will be stored for later use by the toolbox:
 
+
 {:.image-caption}
 **Presence records**
+
 |![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_presence_records.png)|
 
 {:.image-caption}
 **Background points**
+
 |![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_background_points.png)|
+
 
 **sdms_biomod2()** will use the spatially rarefied presence data to build species distribution models (SDMs) for each species, for present conditions, but also for forecasted future conditions.  Here, the framework follows SDM best practices, see [Araujo et al. (2019)](DOI: 10.1126/sciadv.aat4858), using reduced spatial autocorrelation in presence data, as well as accounting for multi-collinearity in predictor variables using Variance Inflation Factors (VIF) if defined in the params file. Alternatively, users may specify a subset of predictors that are ecologically relevant for the species in question (‘**subset_predictors**’). The biomod2 R package is used to evaluate models built using available modelling algorithms which is also subsettable via the params file, ‘**biomod_algorithms**', and retaining only ‘good’ models (i.e. TSS>0.5, modifiable in the params file '**TSS_min**' or '**ROC_min**') for the final ensemble species distribution model prediction. If using MAXENT in your list of SDM modelling algorithms, a copy of the *maxent.jar* file from the [MAXENT website](https://biodiversityinformatics.amnh.org/open_source/maxent/) will need to be placed in a suitable location, and this location set as the ‘**maxent_path**’ parameter in the params file. The model will then be projected onto the future environmental data layers to forecast the species distribution in the future. Variable importances will also be tracked across all retained models so that the user has a sense of which predictor variables have the most influence on the species distribution. Several SDM parameters are modifiable in the params file, including if VIF should be used ('**perform_vif**'), or a subset of variables should be selected ('**subset_predictors**'), which SDM algorithms to use ('**biomod_algorithms**'), number of replicates per algorithm ('**sdm_reps_per_algorithm**', data split percentage between model training and testing ('**data_split_percentage**'). The function will create a self-contained analysis subfolder within the SDMs folder containing all the models and data, summarizing the models themselves as well as various metrics of their performance
 
 The output files from the SDMs will look something like below (current and future SDM predictions, variable importances of model predictors and overall performance of different modelling algorithms that passed defined thresholds to generate final ensemble models)
 
+
 {:.image-caption}
 **Current and future SDMs**
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_SDMs_current_and_future.png)
+
 
 {:.image-caption}
 **Variable importance**
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_biomod_variable_importance_general.png)
+
 
  {:.image-caption}
 **SDM algorithm performance**
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_biomod_model_algorithm_performance_boxplots.png)
+
 
 **exposure()** firstly compares how selected climate variables change between the present and predicted future conditions. It takes this information as well as the predicted change in the SDM between the same two time periods and uses it to calculate ‘Exposure’ (ranging from 0-10), measuring the magnitude of change each population/locality will experience between the two time periods. The output files from the exposure analysis will look something like below (predicted change between current and future SDM predictions – range expansions in green and range contractions in orange, predicted change in environmental predictor 1, predicted change in environmental predictor 2)
 
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_environmental_dissimilarity_current_and_future.png)
+ {:.image-caption}
+**Environmental dissimilarity plot**
+
 
 From these data, a final *Exposure.csv* file will be generated that summarises all the changes in the SDM and your selected environmental predictors for each population (i.e. unique LONG/LAT)
 
+
+ {:.image-caption}
+**Environmental dissimilarity table**
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_3.png)
+
 
 **impute_missing_data()** A final step of the ‘Exposure’ submit script is to set up files for the next step (‘Sensitivity’). Firstly, because GEA analyses (LFMM and RDA) typically require complete data matrices of called SNP genotypes, something which is not achievable using reduced representation library approaches (e.g. RAD-seq/ddRAD-seq), it is necessary to impute missing data, which will be done in two ways, firstly using [LEA]((https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.12382)) (Frichot & François 2015), and secondly based on the mean frequencies of genotypes per population cluster (see Razgour et al. 2018). This will generate additional files (*_imp.csv*, *_imp.geno* and *_imp.lfmm*) in the `-data-/genomic_data/` directory for use with the GEA methods in the next part of the toolbox. Lastly, some basic population structure analyses will be performed in order to understand the spatial population structure of the data so that the GEAs are accounting for this. This will be performed as part of this function and will be output in the `-outputs-/genomic_analyses/` folder – with a *_pop_structure_pca.png* file (including a PCA plot of the data and the inertia of each PC axis) as well as an *_snmf_barplot.png* and *_snmf_cross_entropy.png* file which together can be used to determine likely structure. The output files will look like below, with a PCA plot and inertia of each PC axis, a summary of the cross-entropy values for varying values of k specified in the params file, and a barplot of the population structure selected by the best k
  
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_pop_structure_PCA.png)
- 
+  {:.image-caption}
+**Population structure PCA**
+
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_pop_structure_snmf_cross_entropy.png)
- 
+  {:.image-caption}
+**Population structure**
+
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_pop_structure_snmf_barplot.png)
-   
+    {:.image-caption}
+**Population structure sNMF barplot**
+
+
 Finally, a population assignment file is made (*_pop_assignment_LEA.csv*) which has the population assignment for each individual:
+
+ {:.image-caption}
+**Population assignment**
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_4.png)
 
@@ -178,6 +215,8 @@ Before blindly ploughing ahead with Sensitivity part of the LotE Toolbox, we **h
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-00_parameter_exploration-.R ‘Afrixalus_fornasini’ ```
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/LFMM_RDA_sensitivity.png)
+ {:.image-caption}
+**LFMM and RDA sensitivity**
 
 
 Once you have an idea of the optimal parameters for RDA and LFMM analyses, you can then press on with those analyses. By running the below code, the LFMM and RDA analyses will be performed, firstly to generate empirical results from your data (using the `-01_empirical_data-.R` script) based on the parameters you supplied in the params file (('lfmm_FDR_threshold', and 'rda_SD_threshold').
@@ -189,6 +228,8 @@ Once you have an idea of the optimal parameters for RDA and LFMM analyses, you c
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-04_evaluate_significance-.R ‘Afrixalus_fornasini’ ```
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/SNP_validation.png)
+ {:.image-caption}
+**Validation of candidate SNPs based on simulations**
 
 The simulation scripts above will generate a text file with a list of all of the statistically validated candidate SNPs, named 'Afrixalus_fornasini_adaptive_loci_validated.txt'. If this file exists (i.e. if you have run all the sensitivity analyses), this file (rather than the standard [unvalidated] 'Afrixalus_fornasini_adaptive_loci.txt' will be used to perform the local adaptation analyses - specificially for quantifying genomic offset and quantifying local adaptations.
 
@@ -232,39 +273,67 @@ It will write these loci to a file named *_adaptive_loci.txt* (see below) and us
 The built-in functions automatically select individuals that are falling within the range certain conditions following Razgour et al. (2019). For example, in a two predictor model (e.g. rainfall and temperature), certain individuals may be classed as 'hot_dry' or 'cold_wet' adapted. Individuals that fall in between the ordination categorisations of either of these categories may be categorised as ‘intermediate’. The distribution of these categorised individuals is plotted in the ordination space, and the function will collate the information for each individual, which category it belongs to, and its geographic location is saved in a separate *.csv* file. Categories (e.g. ‘hot_dry’/’cold_wet’) may be defined in the params file ('**category_1**', '**category_2**'). 
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_RDA_individual_categorisation.png)
+ {:.image-caption}
+**Individual categorisation**
+ 
+ 
+ {:.image-caption}
+**Hot-dry adapted individuals**
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_8.png)
 
+
+ {:.image-caption}
+**Cold-wet adapted individuals**
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_9.png)
+
+
+ {:.image-caption}
+**Intermediate individuals**
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_10.png)
 
+
 **quantify_local_adaptations(species_binomial)** will plot the local adaptation categories described above in geographic space. It plots the proportions of individuals that are adapted to each category defined in the params file (e.g. 'hot_dry'/'cold_wet'/'intermediate'). It uses the outputs generated by the individual categorisation (above), and plots a summary map of all samples (individuals and populations) and which conditions they are adapted to
 
-Individual categorization summary:
+
+ {:.image-caption}
+**Summary of local adaptations across populations**
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_11.png)
 
-Population categorization summary (only sites with > individuals):
-
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_12.png)
-
-Output categorization maps (individual left panel, population right panel)
  
-  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_adaptive_categorisation_maps.png)
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_adaptive_categorisation_maps.png)
+ {:.image-caption}
+**Maps of local adaptations**
 
 
 **genomic_offset(species_binomial)** assesses population responses to future climate change based on their current vs. predicted future genotype-environment associations for a given climate scenario. We use genomic offsets, implemented in RDA using the approach of [Capblancq and Forester (2021)](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13722). For each population, a genomic offset value will be calculated based on the degree of local adaptation and the amount of predicted change in the future.
 
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_genomic_offset_plot.png)
+ {:.image-caption}
+**Genomic offset**
+
 
 **neutral_sensitivity()** calculates neutral (i.e. non-adaptive) genetic diversity by masking out the putatively adaptive loci. It requires [PLINK](https://www.cog-genomics.org/plink/) (Purcel et al. 2007) to be installed (read the binary location from the params file, ‘**plink_executable**’), then calls PLINK via R. PLINK will generate the output files and the script here will automatically count the populations, number of individuals and neutral heterozygosity to calculate ‘Neutral sensitivity’ (ranging from 0-10)
 
+
+ {:.image-caption}
+**Summary of neutral sensitivity**
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_13.png)
+
 
 **adaptive_sensitivity()** uses the genomic offset values for each population to generate an ‘Adaptive sensitivity’ metric . The adaptive sensitivity metric will range between 0-10; being lower if a population has lower genomic offset, and higher with higher genomic offset.
 
+
+ {:.image-caption}
+**Summary of adaptive sensitivity**
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_14.png)
+
 
 **create_circuitscape_inputs()** will setup the necessary files and structure for the range shift potential analyses. Because the subsequent analyses will use Circuitscape to model pairwise connectivity, memory and time requirements can become substantial with large datasets (i.e many populations/localities). For this reason it is highly recommended that these are performed in a HPC environment. This script will write the required files (*.ini*, *.jl*) for Circuitscape to run in Julia, along with the necessary files (*.sh*) to submit these jobs via HPC. The script copies relevant files to the Circuitscape directory for analysis, and generates the specific required file for the spatial points input (derived from the input spatial genomic data), which is used to specify the ‘nodes’ to model connectivity between populations. In the params file, an option to transform all 0’s to values of 0.001 is provided (‘**circuitscape_transform_zeros**’) (recommended if running range shift potential analyses on SDM outputs) so that Circuitscape does not interpret unsuitable areas as completely impermeable barriers. Note that as mentioned in section 1, the parameterisation of circuitscape input resistance layers can be skipped if requested, but expects the necessary files in the correct places if you prepare this outside LotE. See section 14 for details.
 
@@ -277,12 +346,24 @@ singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_Landsape_ba
 The circuitscape analyses will take a while to run, especially if there are many samples over a large geographic area (it will make pairwise comparisons across all sampling localities). The circuitscape analysis here models connectivity through the cumulative resistance surface (this has been parameterised using the **circuitscape_layers** and **circuitscape_weights** parameters in the Params.tsv file, though you can (and probably should) explore other possible drivers of gene flow such as environmental predictors, forest cover etc.). A widely used R package for optimizing resistance surfaces is [ResistanceGA](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12984) (Peterman, 2018).
 
 Once the Circuitscape analyses are complete, the R function **Landsape_barriers()** will automatically summarise and plot the data, as well as quantifying range shift potential. **range_shift_potential()** reads in the output data from the Circuitscape analyses and plots maps of modelled current connectivity. It extracts the mean connectivity of each population to all other populations within a maximum dispersal distance (defined for each species in the params file) and then uses this to calculate ‘Landscape barriers’ (0-10), poor range shift potential = 10, good range shift potential = 0. When calculating mean connectivity, a maximum dispersal distance in kilometres ('**max_dispersal_distance_km**') may be set in the params file for defining which populations are within geographic reach of one another (i.e. this avoids unrealistically distant populations being considered when calculating mean connectivity for each population). 
+
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/circuitscape_cumulative_layer.png)
+ {:.image-caption}
+**Circuitscape cumulative layer**
+
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_circuitscape_landscape_connectivity.png)
+ {:.image-caption}
+**Landscape connectivity**
+
+
+ {:.image-caption}
+**Landscape barriers metric**
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_15.png)
- 
+
+
 ### 12.	Population_vulnerability
 To run the final part of the toolbox, run the following code embedded in a shell script:
 ``` singularity exec ~/barratt_software/Singularity_container/bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_population_vulnerability.R ‘Afrixalus_fornasini’ ```
@@ -296,14 +377,26 @@ summary_pdfs(species_binomial)
 
 **population_vulnerability()** integrates the exposure, adaptive and neutral sensitivity and range shift potential results to create a summary ‘Population vulnerability’ metric per population ranging from low (0) to high (10). The function will create a *.csv* output file of the observed data (i.e. where genomic samples are located, and use an inverse distance weighted interpolation to predict Exposure, neutral sensitivity, adaptive sensitivity and Range shift potential results across geographical space, with the underlying assumption that locations closer together share similar properties than those further apart. The function produces summary maps of non-interpolated (observed) and interpolated (predicted) data for each of the metrics (separately and also a composite 4-panel map). To account for principles of complementarity between metrics, for each species that you analyse the composite 4-panel map of exposure, neutral sensitivity, adaptive sensitivity, landscape barriers will highlight the populations that are in the top 10% scores of the metric (highlighted by red circles) and the lower 10% of each metric (highlighted by green circles). This feature enables you to quickly identify population scores for each metric at a glance, so that relevant conservation actions may be considered. The params file allows the user to decide how population vulnerability is calculated by weighting the exposure, adaptive and neutral sensitivity and landscape barriers metrics
 
+ {:.image-caption}
+**Population vulnerability**
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_16.png)
+
+ {:.image-caption}
+**Population vulnerability**
+
 <img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_16.png"> 
 
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_final_4_maps_observed.png)
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_final_population_vulnerability_observed.png)
 
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_final_4_maps_interpolated.png)
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_final_population_vulnerability_interpolated.png)
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_final_4_maps_observed.png)
+  {:.image-caption}
+**All metrics per population plotted in geographic space**
+
+
+![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_final_population_vulnerability_observed.png)
+ {:.image-caption}
+**Population vulnerability**
+
 
 **summary_pdfs()** uses all outputs generated and information in the log file to paste results together into a final summary PDF sheet using the [grobblR](https://cran.r-project.org/web/packages/grobblR/vignettes/grobblR.html) package (Floyd, 2020). The contents of the final summary PDF will depend if you have run the full LotE toolbox - if you have skipped certain steps as detailed in section 1 (e.g. SDMs, GEAs, imputing genotypes, circuitscape parameterisation) then these parts will be replaced with the inputs you provided. Results can be identified and probed by rerunning the individual functions with modified parameter settings, and we recommend thorough reporting and transparency in all publications that use this toolbox.
 
@@ -311,7 +404,12 @@ summary_pdfs(species_binomial)
 
 The below image provides details on the files expected by LotE if you decide to skip the relevant parts of the toolbox (e.g. **skip_sdm**, **skip_impute_genotypes**, **skip_gea**, **skip_circuitscape_layer_parameterisation** options). If you want to prepare these analyses outside the toolbox with the help of an expert or a different piece of software (e.g. [Maxent](https://biodiversityinformatics.amnh.org/open_source/maxent/) for SDMs, [MACH](https://csg.sph.umich.edu/abecasis/mach/tour/imputation.html) for genotype imputation, [Baypass](https://forgemia.inra.fr/mathieu.gautier/baypass_public) for GEAs, or [ResistanceGA](https://github.com/wpeterman/ResistanceGA)/[radish](https://github.com/nspope/radish/tree/master) for parameterising a Circuitscape resistance surface), you'd need to make sure the directory structure is as below, especially ensuring already creating directories and subdirectories as indicated. Blue text are files you will need to add. Examples of all of these and their formats can be found [here](https://github.com/cd-barratt/Life_on_the_edge.github.io/blob/main/file_formats_missing_files.zip)
 
+
+ {:.image-caption}
+**File requirements if skipping certain sections of LotE**
+
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/file_requirements_if_skipping_LotE_sections.png)
+
 
 ### 14.	Running multi-species analyses
 
