@@ -288,12 +288,11 @@ Output categorization maps (individual left panel, population right panel)
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_genomic_offset_plot.png)
 
- 
 **neutral_sensitivity()** calculates neutral (i.e. non-adaptive) genetic diversity by masking out the putatively adaptive loci. It requires [PLINK](https://www.cog-genomics.org/plink/) (Purcel et al. 2007) to be installed (read the binary location from the params file, ‘**plink_executable**’), then calls PLINK via R. PLINK will generate the output files and the script here will automatically count the populations, number of individuals and neutral heterozygosity to calculate ‘Neutral sensitivity’ (ranging from 0-10)
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_13.png)
 
-**sensitivity()** integrates the calculated neutral diversity and exposure with the proportions of adaptively categorised individuals across each population. Based on these it will generate an ‘Adaptive sensitivity’ metric based on the % predicted change in each predictor and the proportion of individuals locally adapted to that predictor. The adaptive sensitivity metric will range between 0-10; being lower if a population has many individuals adapted to a condition that is forecast to change minimally, and higher if the conditions are forecast to change substantially
+**adaptive_sensitivity()** uses the genomic offset values for each population to generate an ‘Adaptive sensitivity’ metric . The adaptive sensitivity metric will range between 0-10; being lower if a population has lower genomic offset, and higher with higher genomic offset.
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_14.png)
 
