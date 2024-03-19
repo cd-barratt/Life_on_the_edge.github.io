@@ -169,7 +169,7 @@ Once you have an idea of the optimal parameters for RDA and LFMM analyses, you c
 
 [ fig of statistical validation]
 
-Once you are confident with the adaptive signals in your data being real, you can go ahead with the rest of the analyses.
+The simulation scripts above will generate a text file with a list of all of the statistically validated candidate SNPs, named 'Afrixalus_fornasini_adaptive_loci_validated.txt'. If this file exists (i.e. if you have run all the sensitvity analyses), this file (rather than the standard [unvalidated]'Afrixalus_fornasini_adaptive_loci.txt' will be used to perform the local adaptation analyses - specificially quantifying genomic offset and quantifying local adaptations.
 
 **10. GEA- LFMM**
 To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
