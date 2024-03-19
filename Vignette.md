@@ -12,10 +12,6 @@ Section 9 gives some information on how to perform sensitivity and simulation an
 **Sections 1-6** below provide details on the initial setup of the toolbox and guidelines for formatting the underlying datasets to analyse. **Sections 7-12** walk the user through a typical complete LotE analysis.
 **Section 13** provides details about files required and where to place them in the directory structure if you want to skip certain parts of the LotE analyses as metioned in the above paragraph. **Section 14** provides details about running multi-species analysis.
 
-| ![space-1.jpg](http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg) | 
-|:--:| 
-| *Space* |
-
 ## Setup
 ### 1.	Example files, code and functions
 To use LotE you’ll first need to do the following:
@@ -72,8 +68,9 @@ iii) When processing your own environmental data, edit the `/processing_environm
 ### 7.	Overview of analyses
 Assuming all the above goes fine, finally, you are ready for performing analyses! To run the LotE toolbox in full on the example data for the East African spiny reed frog (*Afrixalus fornasini*) 
 
-![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini.png)
-*East African spiny reed frog - Afrixalus fornasini*
+| ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini.png) | 
+|:--:| 
+| *East African spiny reed frog - Afrixalus fornasini* |
 
 To run the job and generate all outputs and final files you can simply change directory to your submit scripts and type ```bash ./-run_life_on_the_edge.sh-```. The job will submit and you can wait for the analyses to finish (will take around 36 hours with the example data).
 
