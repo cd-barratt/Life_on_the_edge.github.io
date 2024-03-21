@@ -25,8 +25,6 @@ Please ensure the following software is installed and functional in your HPC env
 * [R (4.1.3)](https://www.r-project.org/). Dependencies for toolbox installed within R version in singularity container upon setup (you specify your R libraries in the script where annotated)
 * [Julia (1.7.2)](https://julialang.org/)
 * [Singularity (3.5)](https://sylabs.io/singularity/) and [bioconductor container](https://cloud.sylabs.io/library/sinwood/bioconductor/bioconductor_3.14) with correct R version. The bioconductor container (bioconductor_3.14.sif) should be downloaded and moved to your working directory for LotE
-* [Stacks 2](https://catchenlab.life.illinois.edu/stacks/)
-* [SRA Toolkit](https://github.com/ncbi/sra-tools) if you plan on using the SRA toolkit to download publicly available data
 
 * Run the `00_setup_life_on_the_edge.sh` script in your HPC environment. The .sh scripts throughout LotE are designed for HPC job queue systems using SLURM, if you use SGE/UGE systems or otherwise then please talk to your HPC cluster administrator to modify them. You’ll need to define your working directories, emails, job logs in the submit script, as well as providing paths to your own personal R libraries. The script will install all necessary R packages and dependencies in your containerized version of R that runs in Singularity
 
