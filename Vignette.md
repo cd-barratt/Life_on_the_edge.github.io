@@ -9,7 +9,7 @@ Life on edge (hereafter LotE) is a new climate change vulnerability assessment t
 ## Setup
 ### 1.	Example files, code and functions
 To use LotE you’ll first need to do the following:
-* Obtain the example code and data for the African reed frog (*Afrixalus fornasini*) from the [DRYAD repository](https://doi.org/10.5061/dryad.2rbnzs7t4). Code will also be maintained in the [github directory](https://github.com/cd-barratt/Life_on_the_edge)
+* Obtain the example code and data for the African reed frog (*Afrixalus fornasini*) from the [DRYAD repository](https://doi.org/10.5061/dryad.2rbnzs7t4). More up-to-date code will be maintained in the [github directory](https://github.com/cd-barratt/Life_on_the_edge)
 * Unzip and move Life_on_the_edge_pipeline_scripts_functions.zip and Life_on_the_edge_pipeline.zip to your working directory where you want to run the toolbox from (in your HPC environment) 
 * Unzip and move Life_on_the_edge_submit_scripts.zip to your submit scripts directory, where you will submit the jobs to run from. This can also be within your working directory if you want (I just like to keep my submit scripts in separate places from my working directory)
 
