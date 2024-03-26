@@ -218,7 +218,7 @@ Once you have an idea of the optimal parameters for RDA and LFMM analyses, you c
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-03_perform_simulations-.R ‘Afrixalus_fornasini’ ```
 ``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/simulations/-04_evaluate_significance-.R ‘Afrixalus_fornasini’ ```
 
- ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_adaptive_SNPs_validation.png)
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_adaptive_SNPs_simulation_validation.png)
  {:.image-caption}
 **Validation of candidate SNPs based on simulations**
 
