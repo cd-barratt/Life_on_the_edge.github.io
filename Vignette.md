@@ -469,6 +469,12 @@ summary_pdfs(species_binomial)
   {:.image-caption}
 **All metrics per population plotted in geographic space**
 
+Aligning with the concepts of complementarity in conservation, LotE will also provide plots of the highest and lowest ranked metrics (Exposure, Neutral sensitivity, Adaptive sensitivity, Landscape barriers, see images below) per population so that the user can gain a sense of differences between the metrics for each population. For example, a population with high landcape barriers and high exposure may benefit from assisted migration, whereas a population with low landscape barriers and low adaptive sensitivity may benefit from habitat restoration along connectivity corridors.
+
+ ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_max_min_per_population.png)
+  {:.image-caption}
+*Maximum and minumum ranked metrics per population**
+
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_final_population_vulnerability_observed.png)
  {:.image-caption}
