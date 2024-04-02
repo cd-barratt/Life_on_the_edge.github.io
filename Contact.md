@@ -13,5 +13,5 @@ Netherlands
 
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/Naturalis_logo.png)
 
-This work is funded by iDiv:
+This work is funded by an individual postdoc grant from the Deutsche Forschungsgemeinschaft (DFG), via:
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/iDiv_logo.png)
