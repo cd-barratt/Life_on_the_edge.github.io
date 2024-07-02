@@ -394,7 +394,7 @@ The built-in functions automatically select individuals that are falling within 
 **Genomic offset**
 
 
-**neutral_sensitivity()** calculates neutral (i.e. non-adaptive) genetic diversity by masking out the putatively adaptive loci. It requires [PLINK](https://www.cog-genomics.org/plink/) (Purcel et al. 2007) to be installed (read the binary location from the params file, ‘**plink_executable**’), then calls PLINK via R. PLINK will generate the output files and the script here will automatically count the populations, number of individuals and neutral heterozygosity to calculate ‘Neutral sensitivity’ (ranging from 0-10)
+**neutral_sensitivity()** calculates neutral (i.e. non-adaptive) genetic diversity by masking out the putatively adaptive loci. It requires [PLINK](https://www.cog-genomics.org/plink/) (Purcel et al. 2007) to be installed (read the binary location from the params file, ‘**plink_executable**’), then calls PLINK via R. PLINK will generate the output files and the script here will automatically count the populations, number of individuals and neutral nucleotide diversity to calculate ‘Neutral sensitivity’ (ranging from 1-10)
 
 
  {:.image-caption}
@@ -403,7 +403,7 @@ The built-in functions automatically select individuals that are falling within 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_13.png)
 
 
-**adaptive_sensitivity()** uses the genomic offset values for each population to generate an ‘Adaptive sensitivity’ metric . The adaptive sensitivity metric will range between 0-10; being lower if a population has lower genomic offset, and higher with higher genomic offset.
+**adaptive_sensitivity()** uses the genomic offset values for each population to generate an ‘Adaptive sensitivity’ metric. The adaptive sensitivity metric will range between 1-10; being lower if a population has lower genomic offset, and higher with higher genomic offset.
 
 
  {:.image-caption}
@@ -422,7 +422,7 @@ singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/run_LOE_Landsape_ba
 
 The circuitscape analyses will take a while to run, especially if there are many samples over a large geographic area (it will make pairwise comparisons across all sampling localities). The circuitscape analysis here models connectivity through the cumulative resistance surface (this has been parameterised using the **circuitscape_layers** and **circuitscape_weights** parameters in the Params.tsv file, though you can (and probably should) explore other possible drivers of gene flow such as environmental predictors, forest cover etc.). A widely used R package for optimizing resistance surfaces is [ResistanceGA](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12984) (Peterman, 2018).
 
-Once the Circuitscape analyses are complete, the R function **Landsape_barriers()** will automatically summarise and plot the data, as well as quantifying landscape barriers. **landscape_barriers()** reads in the output data from the Circuitscape analyses and plots maps of modelled current connectivity. It extracts the mean connectivity of each population to all other populations within a maximum dispersal distance (defined for each species in the params file) and then uses this to calculate ‘Landscape barriers’ (0-10), high landscape barriers = 10, low landscape barriers = 1. When calculating mean connectivity, a maximum dispersal distance in kilometres ('**max_dispersal_distance_km**') may be set in the params file for defining which populations are within geographic reach of one another (i.e. this avoids unrealistically distant populations being considered when calculating mean connectivity for each population). 
+Once the Circuitscape analyses are complete, the R function **Landsape_barriers()** will automatically summarise and plot the data, as well as quantifying landscape barriers. **landscape_barriers()** reads in the output data from the Circuitscape analyses and plots maps of modelled current connectivity. It extracts the mean connectivity of each population to all other populations within a maximum dispersal distance (defined for each species in the params file) and then uses this to calculate ‘Landscape barriers’ (1-10), high landscape barriers = 10, low landscape barriers = 1. When calculating mean connectivity, a maximum dispersal distance in kilometres ('**max_dispersal_distance_km**') may be set in the params file for defining which populations are within geographic reach of one another (i.e. this avoids unrealistically distant populations being considered when calculating mean connectivity for each population). 
 
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/circuitscape_cumulative_layer.png)
