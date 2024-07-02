@@ -20,12 +20,12 @@ The toolbox runs from a Params.tsv file (up to 71 parameters which may be define
 Below a list of some of the things you can do using the Life on the edge toolbox:
 * Download and process spatial data (e.g. GBIF and georeferenced genomic data), clean it and prepare environmental data (e.g. Worldclim) for Species Distribution Modelling (including clipping to relevant extents per species, spatially rarefying input data to control for spatial autocorrelation, and preparing background pseudoabsence data)
 * Run ensemble species distribution models and predict future changes based on user specified parameters
-* Calculate the magnitude of environmental change predicted to occur for each population (based on environmental dissimilarity and SDMs)
+* Calculate the magnitude of environmental change predicted to occur for each population (based on SDMs)
 * Perform Genotype-Environment Association Analyses with user specified environmental predictors (RDA, LFMM)
 * Use simulations and sensitivity analyses to statistically validate the candidate SNPs you have identified using permutation tests
 * Individually categorise individuals in GEA ordination space to assess the extent of local adaptation within each sampled population
 * Quantify genomic offset per population
-* Calculate neutral and adaptive genetic diversity per population based on standing neutral genetic diversity (heterozygosity) and local adaptation of individuals and populations
+* Calculate neutral and adaptive genetic diversity per population based on standing neutral genetic diversity (nucleotide diversity) and local adaptation of individuals and populations
 * Build adaptive SDMs using these locally adapted individuals to gain a more thorough understanding of differential responses amongst locally adapted populations
 * Evaluate the landscape influence on populations ('Landscape barriers', using Circuitscape) to assess the potential for evolutionary rescue of isolated populations and spread of neutral/adaptive genetic diversity
 * Combine multiple analyses to integrate **Exposure**, **Adaptive sensitivity**, **Neutral sensitivity** and **Landscape barriers** to make **Population vulnerability** predictions
