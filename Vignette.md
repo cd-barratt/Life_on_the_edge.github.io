@@ -386,7 +386,7 @@ The built-in functions automatically select individuals that are falling within 
 **Maps of local adaptations**
 
 
-**genomic_offset(species_binomial)** assesses population responses to future climate change based on their current vs. predicted future genotype-environment associations for a given climate scenario. We use genomic offsets, implemented in RDA using the approach of [Capblancq and Forester (2021)](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13722). For each population, a genomic offset value will be calculated based on the degree of local adaptation and the amount of predicted change in the future.
+**genomic_offset(species_binomial)** assesses population responses to future climate change based on their current vs. predicted future genotype-environment associations for a given climate scenario. We use genomic offsets, implemented in RDA using the approach of [Capblancq and Forester (2021)](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13722). For each population, a genomic offset value will be calculated based on the degree of local adaptation and the amount of predicted change in the future. The below plot shows what the output looks like, in our example the offset predictions are clipped to a buffer of 2 degrees around sampled localities to avoid predictions in geographic areas that are unreachable by the species. This can be modified in the params file with the '**genomic_offset_buff_dist_degrees**' parameter.
 
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_genomic_offset_plot.png)
