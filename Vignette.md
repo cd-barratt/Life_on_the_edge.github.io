@@ -459,11 +459,6 @@ summary_pdfs(species_binomial)
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_16.png)
 
- {:.image-caption}
-**Population vulnerability**
-
-<img src="https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/csv_16.png"> 
-
 
  ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/vignette_figs_tables/Afrixalus_fornasini_final_4_maps_observed.png)
   {:.image-caption}
