@@ -7,6 +7,9 @@ Life on edge (hereafter LotE) is a new climate change vulnerability assessment t
 **Section 9** gives some information on how to perform sensitivity and simulation analyses to investigate the local adaptation signals in your empirical data. Though LotE may be run without these scripts (by commenting them out), we **highly** recommend that it is used for your study species to enable statistical confidence in the candidate SNPs identified by your analyses. **Section 13** provides details about files required and where to place them in the directory structure if you want to skip certain parts of the LotE analyses as metioned in the above paragraph. **Section 14** provides details about running multi-species analysis. **Section 15** provides information about the need to understand analyses, and how to skip certain parts of the toolbox.
 
 ## Setup
+
+### NOTE (28-10-2024) - I'll soon be uploading some updated scripts to the DRYAD repository to better control versions of R packages used. I'll update the website very soon as soon as they're up!
+
 ### 1.	Example files, code and functions
 To use LotE you’ll first need to do the following:
 * Obtain the example code and data for the African reed frog (*Afrixalus fornasini*) from the [DRYAD repository](https://doi.org/10.5061/dryad.2rbnzs7t4). More up-to-date code will be maintained in the [github directory](https://github.com/cd-barratt/Life_on_the_edge)
