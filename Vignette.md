@@ -397,7 +397,7 @@ The built-in functions automatically select individuals that are falling within 
 **Genomic offset**
 
 
-**neutral_sensitivity()** calculates neutral (i.e. non-adaptive) genetic diversity by masking out the putatively adaptive loci. It requires [PLINK](https://www.cog-genomics.org/plink/) (Purcel et al. 2007) to be installed (read the binary location from the params file, ‘**plink_executable**’), then calls PLINK via R. PLINK will generate the output files and the script here will automatically count the populations, number of individuals and neutral nucleotide diversity to calculate ‘Neutral sensitivity’ (ranging from 1-10)
+**neutral_sensitivity()** calculates neutral (i.e. non-adaptive) genetic diversity by masking out the putatively adaptive loci. It requires [PLINK](https://www.cog-genomics.org/plink/) (Purcel et al. 2007) to be installed (read the binary location from the params file, ‘**plink_executable**’), then calls PLINK via R. PLINK will generate the output files and the script here will automatically count the populations, number of individuals and neutral nucleotide diversity to calculate ‘Neutral sensitivity’ (ranging from 1-10). Alternatively you may use heterozygosity instead of nucleotide diversity in your populations (for example if you have populations with only a single sampled individual then nucleotide diversity will return a value of 0 (NaN). If you want to use heterozygosity simply change the params file variable ‘**neutral_sensitivity_metric**’ to read 'heterozygosity' instead of 'nucleotide_diversity'.
 
 
  {:.image-caption}
