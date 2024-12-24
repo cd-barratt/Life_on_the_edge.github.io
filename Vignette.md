@@ -8,8 +8,6 @@ Life on edge (hereafter LotE) is a new climate change vulnerability assessment t
 
 ## Setup
 
-### NOTE (28-10-2024) - I'll soon be uploading some updated scripts to the DRYAD repository to better control versions of R packages used. I'll update the website very soon as soon as they're up!
-
 ### 1.	Example files, code and functions
 To use LotE you’ll first need to do the following:
 * Obtain the example code and data for the African reed frog (*Afrixalus fornasini*) from the [DRYAD repository](https://doi.org/10.5061/dryad.2rbnzs7t4). More up-to-date code will be maintained in the [github directory](https://github.com/cd-barratt/Life_on_the_edge)
