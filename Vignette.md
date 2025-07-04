@@ -232,10 +232,6 @@ The simulation scripts above will generate a text file with a list of all of the
 ### 09b GEA- LFMM
 *The following sections (09b and 09c) provide more detail on the LFMM and RDA analyses which have been performed in the sensitivity and simulation analyses described above. These sections may be less relevant to read deeply into if you have performed the simulations and sensitivity analyses and are confident on the list of candidate SNPs that you have*
 
-To run the first part of the sensitivity analyses (LFMM), run the following code embedded in a shell script:
-
-``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-LFMM-.R ‘Afrixalus_fornasini’ ```
-
 LFMM is a univariate method that will account for population structure from the underlying data, and SNP genotypes will be statistically evaluated against your defined environmental predictors to select candidate SNPs that are potentially under selection. LFMM will read in the environmental data you prepared using **prepare_environmental_data()**, and subset the variables of choice (defined as '**env_predictor_1**' and '**env_predictor_2**' in the params file). As highly colinear variables are problematic for GEA it will check the Variance Inflation Factor and report the correlation between the variables in a pair plot (*_env_correlations.png*). If your variables are highly correlated (e.g. >0.8) it may be worth considering alternative variables from your predictor set that are less strongly correlated
 
 
@@ -257,7 +253,6 @@ Output plot of p-values, calibrated p-values and re-adjusted p-values. Here the 
   {:.image-caption}
 **Bioclim 18 p-value distrubtions for LFMM analyses**
 
-
 You may experiment with the GIF, running LFMM a few times until you are satisfied with the readjusted p-value distributions (lower panel). In the log file, the GIF is reported each time, so you can use this to adjust the '**scale_gif_lfmm**' parameter which modifies the GIF. A well calibrated set of p-values should show a GIF of around 1, too liberal <1 and too conservative >1, so if your GIF is around 1.8 for example, and your p-values are very skewed towards high values, you could set your '**scale_gif_lfmm**' parameter to 0.7 which would bring the newly calculated GIF to 1.26 (=1.8 x 0.7) and increase the frequency of lower p-values. Each time, your list of candidate SNPs that are selected to be below the defined FDR (False Discovery Rate) thresholds (0.1, 0.05, 0.01) will change, and it is worth keeping in mind that only a fraction of your total loci (in this case the total is 7309) should realistically show signals of local adaptation. Thus, histogram distributions that are too liberal will detect high numbers of false positives, and too conservative approaches will result in zero detections. P-values are often not well behaved in empirical datasets so you should modify the GIF to an extent that the numbers of candidate SNPs and their p-value distributions are tolerable for you and believable for your study species – there is no right or wrong way to do this, it is subjective, and as long as you report your criteria exactly it is perfectly acceptable. In this regard, the simulation scripts may go soome way to helping you decide what is acceptable for your study system.
 
 The output files containing your candidate SNPs will be written per predictor and also summarized in *_LFMM_candidate_SNPs.csv* (truncated file below). The numbers of SNPs below each FDR threshold will be reported in the log file
@@ -271,9 +266,6 @@ The output files containing your candidate SNPs will be written per predictor an
 After LFMM has completed and you are satisfied with your candidate SNPs, we will proceed with running RDA before performing the rest of the ‘Sensitivity’ analysis, which is somewhat less convoluted
 
 ### 09c.	GEA- RDA
-To run the second part of the sensitivity analyses (RDA), run the following code embedded in a shell script:
-
-``` singularity exec ./bioconductor_3.14.sif Rscript ./-scripts-/-RDA-.R ‘Afrixalus_fornasini’ ```
 
 Similar to LFMM, RDA (Redundancy analysis), a univariate method, will be implemented using the vegan package in R. The process is similar to LFMM whereby population structure will be accounted for in the underlying data, and SNP genotypes will be statistically evaluated against your defined environmental predictors to select candidate SNPs that are potentially under selection. The RDA method implemented here applies the same framework as LFMM, whereby the GIF can be adjusted (using the '**scale_gif_rda**' parameter) to select thresholds for candidate SNPs, but it will also select outlier candidate SNPs using a function that measures the standard deviation of each SNP from the mean loading value across all SNPs (Razgour et al. 2019). We recommend setting this standard deviation ('**rda_sd**') in the params file to 2.5 by default, but you can make this threshold more conservative (e.g by setting it to 3)
 
