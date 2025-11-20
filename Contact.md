@@ -5,13 +5,14 @@ If you have data or are interested in conceptually contributing, please feel fre
 c.d.barratt@gmail.com
 
 ### Current institution: 
-Naturalis Biodiversity Center,
-Darwinweg 2,
-2333 CR, 
-Leiden,
-Netherlands
+Centre for Genetic Resources, the Netherlands (CGN),
+Animal Breeding and Genomics (ABG), 
+Wageningen University and Research
 
-![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/Naturalis_logo.png)
+Mailing address: P.O. Box 338, 6700 AH Wageningen, The Netherlands
+Visiting address: Droevendaalsesteeg 1, 6708 PB Wageningen, The Netherlands
 
-This work is funded by an individual postdoc grant from the Deutsche Forschungsgemeinschaft (DFG), via:
+![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/WUR.png)
+
+This work was funded by an individual postdoc grant from the Deutsche Forschungsgemeinschaft (DFG), via:
 ![image](https://cd-barratt.github.io/Life_on_the_edge.github.io/iDiv_logo.png)
